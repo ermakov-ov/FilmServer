@@ -20,6 +20,8 @@ namespace parser_const
         LFT_isComma        = 5,
         LFT_isDigit        = 6,
         LFT_isChar         = 7,
+        LFT_isCurlyOpenBracket = 8,
+        LFT_isCurlyCloseBracket = 9,
         LFT_Unknown
 
     };

@@ -1,23 +1,29 @@
 #include <iostream>
 #include <fstream>
+#include <string>
+#include <fstream>
+#include <stdexcept>
 #include "common/parser.h"
 
 
 int main()
 {
-    std::ifstream file("test_data.json");
+    std::ifstream file("test_data.json", std::ios::binary | std::ios::ate);
     if (!file.is_open()) {
         std::cerr << "Не удалось открыть файл!" << std::endl;
         return 1;
     }
-    file.seekg(0, std::ios::end); // Переводим указатель в конец
-    std::streampos file_size = file.tellg(); // Получаем позицию — это и есть размер
-    file.seekg(0, std::ios::beg); // Переводим указатель в конец
+    std::size_t fileSize = file.tellg();
 
 
-    char *lp = new char[file_size];
-    //parser::DataPtr buffer(new char)
-    //file.read()
+    parser::DataPtr jsn_data = std::make_unique<char[]>(fileSize + 1);
+    file.seekg(0, std::ios::beg);
+    file.read(jsn_data.get(), static_cast<std::streamsize>(fileSize));
+    jsn_data[fileSize] = '\0' ;
+
+    parser::BufferData buffer_data(jsn_data, fileSize);
+    auto dd = buffer_data.getStartChar() ;
+    buffer_data.nextPosition();
 
     const auto lang = "C++";
     std::cout << "Hello and welcome to " << lang << "!\n";

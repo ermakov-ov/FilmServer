@@ -11,7 +11,9 @@ parser_const::DelimStrData delimStr = {
     {':', parser_const::LexemFirstType::LFT_isColon        },
     {'[', parser_const::LexemFirstType::LFT_isOpenBracket  },
     {']', parser_const::LexemFirstType::LFT_isCloseBracket },
-    {',', parser_const::LexemFirstType::LFT_isComma        }
+    {',', parser_const::LexemFirstType::LFT_isComma        },
+    {'{', parser_const::LexemFirstType::LFT_isCurlyOpenBracket },
+    {'}', parser_const::LexemFirstType::LFT_isCurlyCloseBracket}
 };
 
 namespace parser
