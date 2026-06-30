@@ -22,8 +22,8 @@ int main()
     jsn_data[fileSize] = '\0' ;
 
     parser::BufferData buffer_data(jsn_data, fileSize);
-    auto dd = buffer_data.getStartChar() ;
-    buffer_data.nextPosition();
+    buffer_data.getEnterChar() ;
+
 
     const auto lang = "C++";
     std::cout << "Hello and welcome to " << lang << "!\n";

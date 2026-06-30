@@ -15,6 +15,37 @@
 
 namespace parser
 {
+    class ParserException : public std::exception
+    {
+        public:
+            ParserException(const std::string &msg): m_text{msg} {}
+
+        const char* what() const noexcept override
+        {
+            return m_text.c_str();
+        }
+        private:
+            std::string m_text;
+
+    };
+    class EmptyBufferExp : public ParserException
+    {
+    public:
+        EmptyBufferExp(): ParserException("empty buffer") {}
+
+    };
+    class OutOfRangeExp : public ParserException
+    {
+    public:
+        OutOfRangeExp(): ParserException("try to go out of range") {}
+
+    };
+    class SyntaxErrExp : public ParserException
+    {
+    public:
+        SyntaxErrExp(): ParserException("syntax error") {}
+
+    };
     enum class LexemReadStatus
     {
         LRS_NO_ERROR=0,
@@ -29,12 +60,19 @@ namespace parser
     public:
         BufferData(DataPtr &ex_data, std::size_t length, std::size_t offset=0);
         ~BufferData();
-        LexemReadStatus nextPosition() ;
-        parser_const::LexemFirstType getStartChar() const ;
+
+        void getEnterChar() ;
 
         std::string get_lexem() ;
     private:
-
+        const char nextPosition() ;
+        const char prevPosition();
+        const char currentPosition() const ;
+        bool isEndStrTabChar(const char ch) const;
+        bool isEmptyChar(const char ch) const ;
+        void skipEmptyChars() ;
+        void getDirectLexeme(std::string &ret_value) ;
+        void getStrLexeme(std::string &ret_value);
 
         LexemReadStatus get_lexem(std::string &ret_value) ;
         bool isDoubleQuotes(const char ch) const ;
@@ -43,12 +81,13 @@ namespace parser
         bool isOpenBracket(const char ch) const ;
         bool isCloseBracket(const char ch) const ;
         bool isComma(const char ch) const ;
+        bool isPoint(const char ch) const;
+        bool isSlash(const char ch) const ;
         bool isDigit(const char ch) const ;
         bool isChar(const char ch) const ;
         bool isCharDigit(const char ch) const ;
         
-        
-        
+
         DataPtr     m_data;
         std::size_t m_length;
         std::size_t m_offset;

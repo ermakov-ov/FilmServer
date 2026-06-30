@@ -24,48 +24,200 @@ namespace parser
     ,m_offset(offset)
     {
     }
-    LexemReadStatus BufferData::nextPosition()
-    {
-        if (m_length <= 0 || m_offset + 1 >= m_length)
-        {
-            return LexemReadStatus::LRS_ERROR;
-        }
-    }
+
     BufferData::~BufferData()
     {
 
     }
 
-    parser_const::LexemFirstType BufferData::getStartChar() const
+
+    const char BufferData::nextPosition()
     {
-        parser_const::DelimStrDataCit itDelim = delimStr.find(m_data.get()[m_offset]);
-        if ( itDelim != delimStr.end())
+        if (m_length <= 0 )
         {
-            return itDelim->second ;
+            throw EmptyBufferExp() ;
         }
-        if ( isDigit(m_data.get()[m_offset]))
+        if ( m_offset + 1 >= m_length)
         {
-            return parser_const::LexemFirstType::LFT_isDigit ;
+            throw OutOfRangeExp() ;
         }
-        if ( isChar(m_data.get()[m_offset]))
+
+        return m_data[++m_offset] ;
+    }
+    const char BufferData::prevPosition()
+    {
+        if (m_length <= 0 )
         {
-            return parser_const::LexemFirstType::LFT_isChar ;
+            throw EmptyBufferExp() ;
         }
-        return parser_const::LexemFirstType::LFT_Unknown;
+        if ( m_offset == 0)
+        {
+            throw OutOfRangeExp() ;
+        }
+
+        return m_data[--m_offset] ;
+    }
+    const char BufferData::currentPosition() const
+    {
+        if (m_length <= 0 )
+        {
+            throw EmptyBufferExp();
+        }
+        return m_data[m_offset] ;
     }
 
 
+    bool BufferData::isEndStrTabChar(const char ch) const
+    {
+        return ch == '\n' || ch == '\t' || ch == '\r' ;
+    }
 
-    LexemReadStatus BufferData::get_lexem(std::string &ret_value)
+    bool BufferData::isEmptyChar(const char ch) const
+    {
+        return ch == ' ' || isEndStrTabChar(ch) == true ;
+    }
+
+    void BufferData::skipEmptyChars()
+    {
+        while (1)
+        {
+            if ( isEmptyChar(currentPosition()) == false)
+            {
+                break ;
+            }
+            nextPosition();
+        }
+
+    }
+
+    void BufferData::getStrLexeme(std::string &ret_value)
     {
         ret_value.clear();
 
+        char ch = currentPosition();
+        if (isDoubleQuotes(ch) == false)
+        {
+            throw SyntaxErrExp() ;
+        }
+        nextPosition();
 
+        while (1)
+        {
+            ch = currentPosition();
+            if (isSlash(ch) == true)
+            {
+                nextPosition();
+                ret_value.push_back(currentPosition());
+            }
+            else
+            {
+                if (isDoubleQuotes(ch) == true)
+                {
+                    return ;
+                }
+                ret_value.push_back(ch);
+            }
 
+            nextPosition();
+        }
     }
+    void BufferData::getDirectLexeme(std::string &ret_value)
+    {
+        ret_value.clear();
+
+        char ch = currentPosition();
+        if (isCharDigit(ch) == false)
+        {
+            throw SyntaxErrExp() ;
+        }
+        ret_value.push_back(ch);
+        nextPosition();
+
+        while (1)
+        {
+            ch = currentPosition();
+            if ( isCharDigit(ch) == true  || isPoint(ch))
+            {
+                ret_value.push_back(ch);
+            }
+            else
+            {
+                skipEmptyChars();
+                prevPosition();
+                return ;
+            }
+            nextPosition();
+        }
+    }
+    void BufferData::getEnterChar()
+    {
+        try
+        {
+            while (1)
+            {
+                skipEmptyChars() ;
+                parser_const::DelimStrDataCit itDelim = delimStr.find(currentPosition());
+                if ( itDelim == delimStr.end() && isCharDigit(currentPosition()) == false )
+                {
+                    std::cout<<"Erroneous behavior"<<std::endl;
+                    return ;
+                }
+                if ( isCharDigit(currentPosition()))
+                {
+                    std::string q_str ;
+                    getDirectLexeme(q_str) ;
+                    std::cout<<q_str<<std::endl;
+                }
+                else
+                {
+                    switch (itDelim->second)
+                    {
+                        case parser_const::LexemFirstType::LFT_DoubleQuotes:
+                        case parser_const::LexemFirstType::LFT_isSingleQuotes:
+                        {
+                            std::string q_str ;
+                            getStrLexeme(q_str) ;
+                            std::cout<<q_str<<std::endl;
+                            break ;
+                        }
+                        case parser_const::LexemFirstType::LFT_isColon:
+                        case parser_const::LexemFirstType::LFT_isOpenBracket:
+                        case parser_const::LexemFirstType::LFT_isCloseBracket:
+                        case parser_const::LexemFirstType::LFT_isComma:
+                        case parser_const::LexemFirstType::LFT_isCurlyOpenBracket:
+                        case parser_const::LexemFirstType::LFT_isCurlyCloseBracket:
+                        {
+                            std::cout<<"Symbol - "<<currentPosition()<<std::endl;
+                            break;
+                        }
+
+                    }
+                }
+                nextPosition() ;
+            }
+        }
+        catch (EmptyBufferExp &e)
+        {
+            std::cout<<e.what()<<std::endl;
+        }
+
+        catch (OutOfRangeExp &e)
+        {
+            std::cout<<e.what()<<std::endl;
+        }
+
+        catch (SyntaxErrExp &e)
+        {
+            std::cout<<e.what()<<std::endl;
+        }
+    }
+
+
+
+
     bool BufferData::isDoubleQuotes(const char ch) const
     {
-        return ch == '"' || ch == '\'';
+        return ch == '"';
 
     }
     bool BufferData::isSingleQuotes(const char ch) const
@@ -85,9 +237,13 @@ namespace parser
     {
         return ch == ']';
     }
-    bool BufferData::isComma(const char ch) const
+    bool BufferData::isPoint(const char ch) const
     {
-        return ch == ',';
+        return ch == '.';
+    }
+    bool BufferData::isSlash(const char ch) const
+    {
+        return ch == '\\';
     }
     bool BufferData::isDigit(const char ch) const
     {
