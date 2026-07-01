@@ -1,18 +1,12 @@
-//
-// Created by eow on 30/06/2026.
-//
-
 #ifndef SERVER_JSON_DATA_H
 #define SERVER_JSON_DATA_H
-
 
 #include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
 #include <stdexcept>
-#include <iostream>
-#include "const.h"
+#include "../common/common.h"
 
 namespace json_data
 {

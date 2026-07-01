@@ -18,7 +18,7 @@ namespace json_data
     : value_(v)
     {}
 
-   void JsonObject::setMember(std::string key, JsonValuePtr value)
+    void JsonObject::setMember(std::string key, JsonValuePtr value)
     {
         members_[std::move(key)] = std::move(value);
     }

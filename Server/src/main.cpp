@@ -3,7 +3,7 @@
 #include <string>
 #include <fstream>
 #include <stdexcept>
-#include "common/parser.h"
+#include "json/parser.h"
 
 
 int main()
@@ -22,18 +22,7 @@ int main()
     jsn_data[fileSize] = '\0' ;
 
     parser::BufferData buffer_data(jsn_data, fileSize);
-    auto jsanPtrData = buffer_data.createObjectData() ;
-
-
-    const auto lang = "C++";
-    std::cout << "Hello and welcome to " << lang << "!\n";
-
-    for (int i = 1; i <= 5; i++)
-    {
-        // TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-        std::cout << "i = " << i << std::endl;
-    }
+    auto jsanPtrData = buffer_data.makeJsonData() ;
 
     return 0;
-    // TIP See CLion help at <a href="https://www.jetbrains.com/help/clion/">jetbrains.com/help/clion/</a>. Also, you can try interactive lessons for CLion by selecting 'Help | Learn IDE Features' from the main menu.
 }
