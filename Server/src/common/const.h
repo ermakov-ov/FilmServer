@@ -12,14 +12,14 @@ namespace parser_const
 {
     enum class LexemFirstType
     {
-        LFT_DoubleQuotes   = 0,
-        LFT_isSingleQuotes = 1,
-        LFT_isColon        = 2,
-        LFT_isOpenBracket  = 3,
-        LFT_isCloseBracket = 4,
-        LFT_isComma        = 5,
-        LFT_isDigit        = 6,
-        LFT_isChar         = 7,
+        LFT_DoubleQuotes       = 0,
+        LFT_isSingleQuotes     = 1,
+        LFT_isColon            = 2,
+        LFT_isOpenBracket      = 3,
+        LFT_isCloseBracket     = 4,
+        LFT_isComma            = 5,
+        LFT_isDigitChar        = 6,
+        LFT_isString           = 7,
         LFT_isCurlyOpenBracket = 8,
         LFT_isCurlyCloseBracket = 9,
         LFT_Unknown

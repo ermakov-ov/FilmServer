@@ -22,7 +22,7 @@ int main()
     jsn_data[fileSize] = '\0' ;
 
     parser::BufferData buffer_data(jsn_data, fileSize);
-    buffer_data.getEnterChar() ;
+    auto jsanPtrData = buffer_data.createObjectData() ;
 
 
     const auto lang = "C++";
