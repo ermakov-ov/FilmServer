@@ -137,23 +137,7 @@ namespace parser
 
     json_data::JsonValuePtr BufferData::makeJsonData()
     {
-        try
-        {
-            return createObjectData() ;
-        }
-        catch (parser_common::EmptyBufferExp &e)
-        {
-            std::cout<<e.what()<<std::endl;
-        }
-        catch (parser_common::OutOfRangeExp &e)
-        {
-            std::cout<<e.what()<<std::endl;
-        }
-        catch (parser_common::SyntaxErrExp &e)
-        {
-            std::cout<<e.what()<<std::endl;
-        }
-        return nullptr;
+        return createObjectData() ;
     }
 
     json_data::JsonValuePtr BufferData::createObjectData()
@@ -205,7 +189,7 @@ namespace parser
         parser_common::LexemeFirstType current_type_lexeme = checkEnterChar() ;
         if ( current_type_lexeme != parser_common::LexemeFirstType::LFT_isOpenBracket)
         {
-            return nullptr ;
+            throw parser_common::SyntaxErrExp("Expected '[' for array", m_offset);
         }
 
         do
@@ -259,87 +243,56 @@ namespace parser
                 {
                     return json_data::JsonFactory::makeNumber(num) ;
                 }
-                return nullptr;
+
             }
         }
 
-        return nullptr ;
+        throw parser_common::SyntaxErrExp(m_offset) ;
     }
 
     void BufferData::readEnterStr(parser_common::LexemeFirstType type, std::string &lexeme)
     {
         lexeme.clear();
-        try
-        {
-            switch (type)
-            {
-                case parser_common::LexemeFirstType::LFT_isDigitChar:
-                {
-                    getDirectLexeme(lexeme) ;
-                    break ;
-                }
-                case parser_common::LexemeFirstType::LFT_DoubleQuotes:
-                case parser_common::LexemeFirstType::LFT_isSingleQuotes:
-                {
-                    getStrLexeme(lexeme) ;
-                    break ;
-                }
-                case parser_common::LexemeFirstType::LFT_isColon:
-                case parser_common::LexemeFirstType::LFT_isOpenBracket:
-                case parser_common::LexemeFirstType::LFT_isCloseBracket:
-                case parser_common::LexemeFirstType::LFT_isComma:
-                case parser_common::LexemeFirstType::LFT_isCurlyOpenBracket:
-                case parser_common::LexemeFirstType::LFT_isCurlyCloseBracket:
-                {
-                    lexeme.push_back(currentPosition()) ;
-                    break;
-                }
 
+        switch (type)
+        {
+            case parser_common::LexemeFirstType::LFT_isDigitChar:
+            {
+                getDirectLexeme(lexeme) ;
+                break ;
             }
-        }
-        catch (parser_common::EmptyBufferExp &e)
-        {
-            std::cout<<e.what()<<std::endl;
-        }
-        catch (parser_common::OutOfRangeExp &e)
-        {
-            std::cout<<e.what()<<std::endl;
-        }
-        catch (parser_common::SyntaxErrExp &e)
-        {
-            std::cout<<e.what()<<std::endl;
+            case parser_common::LexemeFirstType::LFT_DoubleQuotes:
+            case parser_common::LexemeFirstType::LFT_isSingleQuotes:
+            {
+                getStrLexeme(lexeme) ;
+                break ;
+            }
+            case parser_common::LexemeFirstType::LFT_isColon:
+            case parser_common::LexemeFirstType::LFT_isOpenBracket:
+            case parser_common::LexemeFirstType::LFT_isCloseBracket:
+            case parser_common::LexemeFirstType::LFT_isComma:
+            case parser_common::LexemeFirstType::LFT_isCurlyOpenBracket:
+            case parser_common::LexemeFirstType::LFT_isCurlyCloseBracket:
+            {
+                lexeme.push_back(currentPosition()) ;
+                break;
+            }
+
         }
     }
 
     parser_common::LexemeFirstType BufferData::checkEnterChar() const
     {
-        try
-        {
-            parser_common::DelimStrDataCit itDelim = delimStr.find(currentPosition());
+        parser_common::DelimStrDataCit itDelim = delimStr.find(currentPosition());
 
-            if ( itDelim == delimStr.end())
+        if ( itDelim == delimStr.end())
+        {
+            if ( parser_common::isCharDigit(currentPosition()))
             {
-                if ( parser_common::isCharDigit(currentPosition()))
-                {
-                    return parser_common::LexemeFirstType::LFT_isDigitChar ;
-                }
-                return parser_common::LexemeFirstType::LFT_Unknown ;
+                return parser_common::LexemeFirstType::LFT_isDigitChar ;
             }
-            return itDelim->second ;
+            return parser_common::LexemeFirstType::LFT_Unknown ;
         }
-        catch (parser_common::EmptyBufferExp &e)
-        {
-            std::cout<<e.what()<<std::endl;
-        }
-        catch (parser_common::OutOfRangeExp &e)
-        {
-            std::cout<<e.what()<<std::endl;
-        }
-        catch (parser_common::SyntaxErrExp &e)
-        {
-            std::cout<<e.what()<<std::endl;
-        }
-
-        return parser_common::LexemeFirstType::LFT_Unknown ;
+        return itDelim->second ;
     }
 }
