@@ -15,7 +15,7 @@ parser_common::DelimStrData delimStr = {
 
 namespace parser
 {
-    BufferData::BufferData(DataPtr &ex_data, std::size_t length, std::size_t offset)
+    BufferData::BufferData(DataPtr ex_data, std::size_t length, std::size_t offset)
     :m_data(std::move(ex_data))
     ,m_length(length)
     ,m_offset(offset)
@@ -26,11 +26,11 @@ namespace parser
     {
         if (m_length <= 0 )
         {
-            throw parser_common::EmptyBufferExp() ;
+            throw parser_common::EmptyBufferExp(0) ;
         }
         if ( m_offset + 1 >= m_length)
         {
-            throw parser_common::OutOfRangeExp() ;
+            throw parser_common::OutOfRangeExp(m_offset + 1) ;
         }
 
         return m_data[++m_offset] ;
@@ -39,11 +39,11 @@ namespace parser
     {
         if (m_length <= 0 )
         {
-            throw parser_common::EmptyBufferExp() ;
+            throw parser_common::EmptyBufferExp(0) ;
         }
         if ( m_offset == 0)
         {
-            throw parser_common::OutOfRangeExp() ;
+            throw parser_common::OutOfRangeExp(m_offset + 1) ;
         }
 
         return m_data[--m_offset] ;
@@ -52,7 +52,7 @@ namespace parser
     {
         if (m_length <= 0 )
         {
-            throw parser_common::EmptyBufferExp();
+            throw parser_common::EmptyBufferExp(0);
         }
         return m_data[m_offset] ;
     }
@@ -84,7 +84,7 @@ namespace parser
         char ch = currentPosition();
         if (parser_common::isDoubleQuotes(ch) == false)
         {
-            throw parser_common::SyntaxErrExp() ;
+            throw parser_common::SyntaxErrExp(m_offset + 1) ;
         }
 
         do
@@ -115,7 +115,7 @@ namespace parser
         char ch = currentPosition();
         if (parser_common::isCharDigit(ch) == false)
         {
-            throw parser_common::SyntaxErrExp() ;
+            throw parser_common::SyntaxErrExp(m_offset + 1) ;
         }
         ret_value.push_back(ch);
 
@@ -165,7 +165,7 @@ namespace parser
 
         if ( current_type_lexeme != parser_common::LexemeFirstType::LFT_isCurlyOpenBracket)
         {
-            throw parser_common::SyntaxErrExp() ;
+            throw parser_common::SyntaxErrExp(m_offset) ;
         }
 
         do
@@ -175,13 +175,13 @@ namespace parser
             current_type_lexeme = stepToNextChar();
             if ( current_type_lexeme != parser_common::LexemeFirstType::LFT_DoubleQuotes)
             {
-                throw parser_common::SyntaxErrExp("not found '\"'") ;
+                throw parser_common::SyntaxErrExp("not found '\"'", m_offset + 1) ;
             }
             readEnterStr(current_type_lexeme, title_object);
             //--------- : -----------------
             if ( stepToNextChar() != parser_common::LexemeFirstType::LFT_isColon)
             {
-                throw parser_common::SyntaxErrExp("not found ':'") ;
+                throw parser_common::SyntaxErrExp("not found ':'", m_offset + 1) ;
             }
             //-------- right value -----------------
             obj.setMember(title_object, createRValueData());
@@ -189,7 +189,7 @@ namespace parser
             current_type_lexeme = stepToNextChar(); ;
             if ( current_type_lexeme != parser_common::LexemeFirstType::LFT_isComma && current_type_lexeme != parser_common::LexemeFirstType::LFT_isCurlyCloseBracket)
             {
-                throw parser_common::SyntaxErrExp("not found ','") ;
+                throw parser_common::SyntaxErrExp("not found ','", m_offset + 1) ;
             }
         }
         while (current_type_lexeme != parser_common::LexemeFirstType::LFT_isCurlyCloseBracket);
@@ -215,7 +215,7 @@ namespace parser
 
             if ( current_type_lexeme != parser_common::LexemeFirstType::LFT_isComma && current_type_lexeme != parser_common::LexemeFirstType::LFT_isCloseBracket)
             {
-                throw parser_common::SyntaxErrExp() ;
+                throw parser_common::SyntaxErrExp(m_offset) ;
             }
         }
         while (current_type_lexeme != parser_common::LexemeFirstType::LFT_isCloseBracket);

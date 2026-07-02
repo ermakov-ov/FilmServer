@@ -10,36 +10,32 @@
 
 namespace parser_common
 {
-    class ParserException : public std::exception
+    class ParserException : public std::runtime_error
     {
     public:
-        ParserException(const std::string &msg): m_text{msg} {}
-
-        const char* what() const noexcept override
-        {
-            return m_text.c_str();
-        }
+        explicit ParserException(const std::string &msg, size_t pos): std::runtime_error(msg) {}
+        size_t position() const noexcept { return m_pos; }
     private:
-        std::string m_text;
+        size_t m_pos;
 
     };
     class EmptyBufferExp : public ParserException
     {
     public:
-        EmptyBufferExp(): ParserException("empty buffer") {}
+        explicit EmptyBufferExp(size_t pos): ParserException("empty buffer", pos) {}
     };
 
     class OutOfRangeExp : public ParserException
     {
     public:
-        OutOfRangeExp(): ParserException("try to go out of range") {}
+        explicit OutOfRangeExp(size_t pos): ParserException("try to go out of range", pos) {}
     };
 
     class SyntaxErrExp : public ParserException
     {
     public:
-        SyntaxErrExp(): ParserException("syntax error") {}
-        explicit SyntaxErrExp(const std::string &msg): ParserException(msg) {}
+        explicit SyntaxErrExp(size_t pos): ParserException("syntax error", pos) {}
+        explicit SyntaxErrExp(const std::string &msg, size_t pos): ParserException(msg, pos) {}
     };
 
     enum class LexemeFirstType

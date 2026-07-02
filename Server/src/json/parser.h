@@ -18,7 +18,7 @@ namespace parser
     class BufferData
     {
     public:
-        BufferData(DataPtr &ex_data, std::size_t length, std::size_t offset=0);
+        explicit BufferData(DataPtr ex_data, std::size_t length, std::size_t offset=0);
         ~BufferData() = default;
 
         json_data::JsonValuePtr makeJsonData();
