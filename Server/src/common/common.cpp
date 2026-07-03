@@ -40,7 +40,7 @@ namespace parser_common
     }
     bool isCharDigit(const char ch)
     {
-        return isChar(ch) == true ||isDigit(ch) == true ;
+        return isChar(ch) == true || isDigit(ch) == true || ch == '.' || ch == 'e' || ch == 'E' || ch == '-' || ch == '+' ;
     }
     bool isBooleanValue(const std::string &str, bool &value)
     {
