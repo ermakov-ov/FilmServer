@@ -2,6 +2,11 @@
 
 namespace parser
 {
+
+    StreamError::StreamError(const std::string& msg)
+    : std::runtime_error(msg)
+    {
+    }
     StreamBuffer::StreamBuffer(DataPtr data, std::size_t size)
     : m_data(std::move(data))
     , m_length(size)

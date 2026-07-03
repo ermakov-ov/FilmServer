@@ -2,8 +2,19 @@
 
 namespace parser
 {
+    LexerError::LexerError(const std::string& msg, std::size_t pos)
+    : std::runtime_error(msg)
+    , m_pos(pos)
+    {
+    }
+
+    std::size_t LexerError::position() const
+    {
+        return m_pos;
+    }
+
     LexerString::LexerString(StreamBuffer& stream)
-        : m_stream(stream)
+    : m_stream(stream)
     {
     }
 

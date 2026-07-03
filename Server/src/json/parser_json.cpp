@@ -2,6 +2,17 @@
 
 namespace parser
 {
+    ParseError::ParseError(const std::string& msg, std::size_t pos)
+    : std::runtime_error(msg)
+    , m_pos(pos)
+    {
+    }
+
+    std::size_t ParseError::position() const
+    {
+        return m_pos;
+    }
+    //--------------------------------------
     ParserJson::ParserJson(StreamBuffer stream)
         : m_stream(std::move(stream))
         , m_lexer(m_stream)

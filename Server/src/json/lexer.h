@@ -29,16 +29,9 @@ enum class TokenType
 class LexerError : public std::runtime_error
 {
 public:
-    LexerError(const std::string& msg, std::size_t pos)
-    : std::runtime_error(msg)
-    , m_pos(pos)
-    {
-    }
+    LexerError(const std::string& msg, std::size_t pos);
 
-    std::size_t position() const
-    {
-        return m_pos;
-    }
+    std::size_t position() const ;
 
 private:
     std::size_t m_pos;

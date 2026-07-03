@@ -11,16 +11,9 @@ namespace parser
 class ParseError : public std::runtime_error
 {
 public:
-    ParseError(const std::string& msg, std::size_t pos)
-        : std::runtime_error(msg)
-        , m_pos(pos)
-    {
-    }
+    ParseError(const std::string& msg, std::size_t pos) ;
 
-    std::size_t position() const
-    {
-        return m_pos;
-    }
+    std::size_t position() const;
 
 private:
     std::size_t m_pos;

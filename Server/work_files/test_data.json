@@ -1,5 +1,7 @@
 {
-  "string_example": "Привет, C++!",
+  "string_example":      "Привет, C++!",
+  
+       
   "number_int": 42,
   "number_float": 3.14159,
   "boolean_true": true,
@@ -28,4 +30,4 @@
 
   "special_characters": "Кавычки \" и обратные слеши \\ работают",
   "unicode_example": "Привет 🌍! Это Unicode."
-}
+]

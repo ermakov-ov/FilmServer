@@ -15,7 +15,6 @@ namespace json_data
     using JsonValueMapData   = std::unordered_map<std::string, JsonValuePtr>;
     using JsonValueArrayData = std::vector<JsonValuePtr>;
 
-// --- Базовый класс для любого JSON-значения ---
     class JsonValue {
     public:
         enum class Type { Null, String, Number, Bool, Object, Array };
@@ -23,7 +22,6 @@ namespace json_data
         virtual ~JsonValue() = default;
         virtual Type type() const = 0;
 
-        // Приведение к конкретным типам (throw если тип не совпадает)
         virtual const std::string& asString() const { throw std::runtime_error("Type mismatch: expected string");};
         virtual double asNumber() const { throw std::runtime_error("Type mismatch: expected number"); };
         virtual bool asBool() const { throw std::runtime_error("Type mismatch: expected bool"); };
@@ -102,7 +100,7 @@ namespace json_data
         JsonValueArrayData& asArrayMutable() override { return items_; }
     };
 
-// --- Фабрика для удобного создания ---
+// ---
     struct JsonFactory {
         static JsonValuePtr makeNull() {
             return std::make_unique<JsonNull>();

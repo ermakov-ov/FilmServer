@@ -15,10 +15,7 @@ namespace parser
     class StreamError : public std::runtime_error
     {
     public:
-        explicit StreamError(const std::string& msg)
-        : std::runtime_error(msg)
-        {
-        }
+        explicit StreamError(const std::string& msg);
     };
 
     class StreamBuffer
