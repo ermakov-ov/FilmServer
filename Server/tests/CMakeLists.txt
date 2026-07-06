@@ -1,4 +1,4 @@
-add_executable(my_tests test_lexer.cpp)
+add_executable(my_tests test_lexer.cpp test_parser.cpp)
 
 target_link_libraries(
         my_tests

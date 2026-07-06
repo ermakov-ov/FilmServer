@@ -16,7 +16,7 @@ namespace parser
 
     char StreamBuffer::peek() const
     {
-        if (m_offset + 1 >= m_length)
+        if (isEof())
         {
             throw StreamError("End of stream");
         }
@@ -25,7 +25,7 @@ namespace parser
 
     char StreamBuffer::next()
     {
-        if (m_offset + 1 >= m_length)
+        if (isEof())
         {
             throw StreamError("Try to advance beyond end of stream");
         }
@@ -49,7 +49,7 @@ namespace parser
 
     bool StreamBuffer::isEof() const
     {
-        return m_offset + 1 >= m_length;
+        return m_offset + 1 > m_length;
     }
 
     std::size_t StreamBuffer::position() const

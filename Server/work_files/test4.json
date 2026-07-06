@@ -1,0 +1,10 @@
+{
+  "isActive": true,
+  "score": 98.5,
+  "multiplier": 2.5e+3,
+  "tags": ["red", "green", null],
+  "meta": {
+    "enabled": false,
+    "count": 0
+  }
+}

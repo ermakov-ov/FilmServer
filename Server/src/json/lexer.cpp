@@ -45,11 +45,10 @@ namespace parser
         {
             throw LexerError("Expected double quote", m_stream.position());
         }
-
         std::string result;
-        while (m_stream.isEof() == false)
+
+        for (m_stream.next(); m_stream.isEof() == false; m_stream.next())
         {
-            m_stream.next();
             char ch = m_stream.peek();
             if (parser_common::isDoubleQuotes(ch))
             {
@@ -83,11 +82,11 @@ namespace parser
         {
             throw LexerError("Invalid number format", m_stream.position() );
         }
-
         ret_value.push_back(ch);
-        while ( m_stream.isEof() == false )
+
+        for (m_stream.next(); m_stream.isEof() == false; m_stream.next())
         {
-            ch = m_stream.next();
+            ch = m_stream.peek();
             if ( parser_common::isCharDigit(ch) == true )
             {
                 ret_value.push_back(ch);

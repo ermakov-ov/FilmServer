@@ -1,8 +1,8 @@
 
 #include <gtest/gtest.h>
-#include "../json/lexer.h"
-#include "../json/stream.h"
-#include "../common/common.h"
+#include "../src/json/lexer.h"
+#include "../src/json/stream.h"
+#include "../src/common/common.h"
 #include <memory>
 #include <cstring>
 
@@ -34,11 +34,12 @@ TEST(LexerTest, NextTokenConsumes)
     StreamBuffer stream = makeStream("{   [");
     LexerString lexer(stream);
 
-    EXPECT_EQ(lexer.nextToken(), TokenType::TT_CurlyOpen);
+    EXPECT_EQ(lexer.peekToken(), TokenType::TT_CurlyOpen);
     // После '{' и пропущенных пробелов курсор должен быть на '['
-    EXPECT_EQ(stream.position(), 4);
+    EXPECT_EQ(stream.position(), 0);
 
     EXPECT_EQ(lexer.nextToken(), TokenType::TT_BracketOpen);
+    EXPECT_EQ(stream.position(), 4);
 }
 
 TEST(LexerTest, ReadStringWithEscape)
@@ -56,8 +57,7 @@ TEST(LexerTest, ReadStringWithEscape)
     EXPECT_EQ(result[1], '\n');
     EXPECT_EQ(result[2], 'b');
 
-    // Курсор должен стоять на пробеле перед "extra"
-    EXPECT_EQ(stream.position(), 6);
+    EXPECT_EQ(stream.position(), 5);
 }
 
 TEST(LexerTest, ThrowOnUnclosedString)
@@ -76,14 +76,13 @@ TEST(LexerTest, IsEofAndPeekEdgeCases)
     StreamBuffer stream = makeStream("{}");
     LexerString lexer(stream);
 
-    EXPECT_NE(lexer.nextToken(), TokenType::TT_Unknown);
-    EXPECT_NE(lexer.nextToken(), TokenType::TT_Unknown);
+    EXPECT_EQ(lexer.peekToken(), TokenType::TT_CurlyOpen);
+    EXPECT_EQ(lexer.nextToken(), TokenType::TT_CurlyClose);
+
+    lexer.nextToken();
 
     // Теперь поток должен быть в конце
     EXPECT_TRUE(stream.isEof());
 
-    // Попытка peek на EOF должна кидать (по твоей реализации)
-    EXPECT_THROW({
-        (void)lexer.peekToken();
-    }, parser::StreamError); // или LexerError, если у тебя внутри peekToken кидается LexerError
+    EXPECT_EQ(lexer.nextToken(), TokenType::TT_Unknown);
 }

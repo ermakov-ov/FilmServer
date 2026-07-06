@@ -1,22 +1,22 @@
 {
-  "string_example":      "Привет, C++!",
-  
-       
+  "string_example": "Привет, C++!",
   "number_int": 42,
   "number_float": 3.14159,
   "boolean_true": true,
   "boolean_false": false,
   "null_value": null,
-
   "object_nested": {
     "inner_string": "Вложенный объект",
     "inner_number": 123,
-    "inner_array": [1, 2, 3],
+    "inner_array": [
+      1,
+      2,
+      3
+    ],
     "deeply_nested": {
       "level_3": "Три уровня вложенности"
     }
   },
-
   "array_mixed": [
     "строка в массиве",
     100,
@@ -25,9 +25,12 @@
     {
       "key_in_array": "объект внутри массива"
     },
-    [1, 2, "вложенный массив"]
+    [
+      1,
+      2,
+      "вложенный массив"
+    ]
   ],
-
   "special_characters": "Кавычки \" и обратные слеши \\ работают",
   "unicode_example": "Привет 🌍! Это Unicode."
-]
+}
