@@ -19,7 +19,12 @@ add_library(json_lib STATIC
 target_include_directories(json_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # --- Приложение Server ---
-add_executable(Server src/main.cpp)
+add_executable(Server src/main.cpp
+        src/film_db/actor.h
+        src/film_db/director.h
+        src/film_db/film.h
+        src/film_db/film_db.h
+        src/film_db/film_db.cpp)
 target_link_libraries(Server PRIVATE json_lib)
 
 # --- Тесты (только если BUILD_TESTS=ON) ---
