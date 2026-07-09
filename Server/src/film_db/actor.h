@@ -18,4 +18,5 @@ public:
     int id() const noexcept { return id_; }
     const std::string& name() const noexcept { return name_; }
 };
+
 #endif //JSONPARSER_ACTOR_H

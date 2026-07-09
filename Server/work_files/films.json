@@ -1,0 +1,38 @@
+[
+  {
+    "id": 100,
+    "title": "Forrest Gump",
+    "releaseYear": 1994,
+    "description": "Life is like a box of chocolates...",
+    "genres": ["Drama", "Romance"],
+    "actorIds": [1],
+    "directorId": 10
+  },
+  {
+    "id": 101,
+    "title": "The Shawshank Redemption",
+    "releaseYear": 1994,
+    "description": "Two imprisoned men bond over a number of years...",
+    "genres": ["Drama"],
+    "actorIds": [2],
+    "directorId": 11
+  },
+  {
+    "id": 102,
+    "title": "Inception",
+    "releaseYear": 2010,
+    "description": "A thief who steals corporate secrets through dream-sharing technology...",
+    "genres": ["Sci-Fi", "Action"],
+    "actorIds": [3, 4],
+    "directorId": 12
+  },
+  {
+    "id": 103,
+    "title": "There Will Be Blood",
+    "releaseYear": 2007,
+    "description": "An oil prospector in Southern California...",
+    "genres": ["Drama"],
+    "actorIds": [5],
+    "directorId": 13
+  }
+]

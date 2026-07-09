@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(JsonParser LANGUAGES CXX)
+project(HorseLine LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -7,25 +7,25 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Опция: включать ли тесты (по умолчанию ON, чтобы my_tests появился)
 option(BUILD_TESTS "Build tests" ON)
 
-# --- Библиотека json_lib ---
-add_library(json_lib STATIC
-        src/common/common.cpp
-        src/json/json_data.cpp
-        src/json/lexer.cpp
-        src/json/parser_json.cpp
-        src/json/stream.cpp
-        # добавь сюда остальные cpp файлы библиотеки, если есть
-)
-target_include_directories(json_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+# --- Общие библиотеки ---
 
-# --- Приложение Server ---
-add_executable(Server src/main.cpp
-        src/film_db/actor.h
-        src/film_db/director.h
-        src/film_db/film.h
-        src/film_db/film_db.h
-        src/film_db/film_db.cpp)
-target_link_libraries(Server PRIVATE json_lib)
+# json_lib
+add_subdirectory(src/json)          # внутри: add_library(json_lib ...)
+
+# film_db_lib
+add_subdirectory(src/film_db)       # внутри: add_library(film_db_lib ...), link json_lib
+
+# common (если там есть .cpp)
+#add_subdirectory(src/common)       # если только .h — можно просто добавить include dir
+
+# --- Приложения ---
+
+# Server (HTTP API)
+add_subdirectory(src/apps/server)       # внутри: add_executable(Server ...), link film_db_lib
+
+# Player (проигрыватель)
+add_subdirectory(src/apps/player)       # внутри: add_executable(Player ...), link common, json_lib и т.д.
+
 
 # --- Тесты (только если BUILD_TESTS=ON) ---
 if(BUILD_TESTS)

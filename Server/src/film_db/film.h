@@ -13,8 +13,8 @@ struct Film {
     int releaseYear;
     std::string description;
 
-    std::vector<std::string> genres;      // для простоты пока строки
-    std::vector<int> actorIds;           // связи через ID
-    int directorId;                     // связь через ID
+    std::vector<std::string> genres;
+    std::vector<int> actorIds;
+    int directorId;
 };
 #endif //JSONPARSER_FILM_H
