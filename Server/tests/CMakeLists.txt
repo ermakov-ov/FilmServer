@@ -1,9 +1,14 @@
-add_executable(my_tests test_lexer.cpp test_parser.cpp)
+add_executable(my_tests test_lexer.cpp
+        test_parser.cpp
+        test_films.cpp
+        ../src/apps/server/load_json.cpp
+)
 
 target_link_libraries(
         my_tests
         PRIVATE
         json_lib
+        film_db_lib
         GTest::gtest
         GTest::gtest_main
 )

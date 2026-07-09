@@ -14,6 +14,14 @@
 #include <vector>
 #include <optional>
 
+
+// TODO (индексы):
+// Выбран подход "Вариант 2" (инкапсуляция в FilmDb).
+// Индексы (byYear, byDirector) будут храниться приватно.
+// Обновление индексов происходит ТОЛЬКО внутри addFilm/removeFilm.
+// Наружу индексы не выставляются — только методы findByYear/findByDirector.
+
+
 class FilmDb {
     // Хранение по ID: стабильные адреса элементов, без реаллокаций при вставке других
     std::map<int, Film> filmsById_;

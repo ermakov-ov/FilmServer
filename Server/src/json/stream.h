@@ -24,6 +24,7 @@ namespace parser
         using DataPtr = std::unique_ptr<char[]>;
 
         explicit StreamBuffer(DataPtr data, std::size_t size);
+        explicit StreamBuffer(const std::string& data);
 
         char peek() const;
         char next();

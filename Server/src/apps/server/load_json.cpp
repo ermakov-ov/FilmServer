@@ -12,12 +12,11 @@
 #include <stdexcept>
 
 namespace {
-
-// Вспомогательная функция для чтения файла в строку
 std::string readFile(const std::string& path)
-    {
+{
     std::ifstream file(path);
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
         throw std::runtime_error("Cannot open file: " + path);
     }
     return std::string((std::istreambuf_iterator<char>(file)),
@@ -30,14 +29,7 @@ void loadDataFromJson(FilmDb& db, const std::string& actorsPath, const std::stri
 {
     {
         auto jsonStr = readFile(actorsPath);
-        auto jsn_data = std::make_unique<char[]>(jsonStr.size() + 1);
-
-        memcpy(jsn_data.get(), jsonStr.c_str(), jsonStr.size());
-
-        jsn_data[jsonStr.size()] = '\0' ;
-
-        parser::StreamBuffer stream(std::move(jsn_data), jsonStr.size());
-        parser::ParserJson parser(std::move(stream));
+        parser::ParserJson parser(jsonStr);
 
         auto parsedRoot = parser.parse();
         const json_data::JsonValue* root = parsedRoot.get();
@@ -78,14 +70,7 @@ void loadDataFromJson(FilmDb& db, const std::string& actorsPath, const std::stri
     // 3. Загрузка фильмов
     {
         auto jsonStr = readFile(filmsPath);
-        auto jsn_data = std::make_unique<char[]>(jsonStr.size() + 1);
-
-        memcpy(jsn_data.get(), jsonStr.c_str(), jsonStr.size());
-
-        jsn_data[jsonStr.size()] = '\0' ;
-
-        parser::StreamBuffer stream(std::move(jsn_data), jsonStr.size());
-        parser::ParserJson parser(std::move(stream));
+        parser::ParserJson parser(std::move(jsonStr));
 
         auto parsedRoot = parser.parse(); // <-- твой парсер
         const json_data::JsonValue* root = parsedRoot.get();

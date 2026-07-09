@@ -1,5 +1,7 @@
 #include "parser_json.h"
 
+#include <fstream>
+
 namespace parser
 {
     ParseError::ParseError(const std::string& msg, std::size_t pos)
@@ -11,6 +13,12 @@ namespace parser
     std::size_t ParseError::position() const
     {
         return m_pos;
+    }
+    //--------------------------------------
+    ParserJson::ParserJson(const std::string &data_str)
+    : m_stream(data_str)
+    , m_lexer(m_stream)
+    {
     }
     //--------------------------------------
     ParserJson::ParserJson(StreamBuffer stream)

@@ -23,6 +23,7 @@ class ParserJson
 {
 public:
     explicit ParserJson(StreamBuffer stream);
+    explicit ParserJson(const std::string &data_str);
 
     json_data::JsonValuePtr parse();
 

@@ -8,7 +8,7 @@ int main()
     FilmDb db;
 
     try {
-        loadDataFromJson(db, "actors.json", "films.json");
+        loadDataFromJson(db, "./data/actors.json", "./data/films.json");
     }
     catch (const std::exception& e) {
         std::cerr << "Startup error: " << e.what() << "\n";
