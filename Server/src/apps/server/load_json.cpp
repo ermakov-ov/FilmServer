@@ -25,7 +25,7 @@ std::string readFile(const std::string& path)
 
 } // namespace
 
-void loadDataFromJson(FilmDb& db, const std::string& actorsPath, const std::string& filmsPath)
+void loadDataFromJson(FilmDb& db, const std::string& filmsPath, const std::string& actorsPath)
 {
     {
         auto jsonStr = readFile(actorsPath);

@@ -10,7 +10,7 @@
 
 // Предполагаем, что у тебя есть json_lib::parseFile(path) -> JsonValue
 // и методы для доступа к полям: asInt, asString, asArray, asObject и т.д.
-void loadDataFromJson(FilmDb& db, const std::string& actorsPath, const std::string& filmsPath);
+void loadDataFromJson(FilmDb& db, const std::string& filmsPath, const std::string& actorsPath);
 std::vector<Director> getDefaultDirectors();
 
 #endif //JSONPARSER_LOAD_JSON_H

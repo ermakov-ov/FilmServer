@@ -54,6 +54,9 @@ public:
 
     template <typename Func>
     void visitFilmsByDirector(int directorId, Func f) const;
+    size_t numberFilms() const {
+        return filmsById_.size();
+    }
 };
 
 // --- Реализация шаблонов прямо в заголовке (чтобы компилировалось без .cpp) ---
