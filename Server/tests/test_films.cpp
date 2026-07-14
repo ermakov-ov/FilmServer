@@ -9,25 +9,25 @@ const std::string FILMS_JSON  = "./data/films.json";
 
 TEST(FilmDbLoadTest, LoadAndFindFilm)
 {
-    FilmDb db;
+    FilmSharedPtr film_db = std::make_shared<FilmDb>();
 
     std::string deb = std::filesystem::current_path() ;
-    // 1. Загружаем данные
-    EXPECT_NO_THROW(loadDataFromJson(db, ACTORS_JSON, FILMS_JSON));
 
-    // 2. Ищем конкретный фильм
-    auto film = db.findFilmById(100);
+    EXPECT_NO_THROW(loadDataFromJson(film_db, FILMS_JSON, ACTORS_JSON));
+
+    auto film = film_db->findFilmById(100);
     ASSERT_TRUE(film);
-    EXPECT_EQ(film->title, "Forrest Gump");
-    EXPECT_EQ(film->releaseYear, 1994);
+    EXPECT_EQ(film->m_title, "Forrest Gump");
+    EXPECT_EQ(film->m_releaseYear, 1994);
 }
 
-TEST(FilmDbLoadTest, YearFilter) {
-    FilmDb db;
-    EXPECT_NO_THROW(loadDataFromJson(db, ACTORS_JSON, FILMS_JSON));
+TEST(FilmDbLoadTest, YearFilter)
+{
+    FilmSharedPtr film_db = std::make_shared<FilmDb>();
+    EXPECT_NO_THROW(loadDataFromJson(film_db, FILMS_JSON, ACTORS_JSON));
 
     int count1994 = 0;
-    db.visitFilmsByYear(1994, [&](const Film&) { ++count1994; });
+    film_db->visitFilmsByYear(1994, [&](const Film&) { ++count1994; });
 
-    EXPECT_GE(count1994, 2); // Forrest Gump и Shawshank точно есть
+    EXPECT_GE(count1994, 2);
 }

@@ -6,12 +6,11 @@
 #include <unordered_map>
 #include <vector>
 #include <stdexcept>
-#include "../common/common.h"
 
 namespace json_data
 {
     class JsonValue ;
-    using JsonValuePtr      = std::unique_ptr<JsonValue>;
+    using JsonValuePtr       = std::unique_ptr<JsonValue>;
     using JsonValueMapData   = std::unordered_map<std::string, JsonValuePtr>;
     using JsonValueArrayData = std::vector<JsonValuePtr>;
 
@@ -34,6 +33,8 @@ namespace json_data
         virtual const JsonValueArrayData& asArray() const { throw std::runtime_error("Type mismatch: expected array");};
         virtual JsonValueArrayData& asArrayMutable() { throw std::runtime_error("Type mismatch: expected array");} ;
 
+        virtual std::string toString() const = 0;
+
         bool isNull() const { return type() == Type::Null; }
         bool isString() const { return type() == Type::String; }
         bool isNumber() const { return type() == Type::Number; }
@@ -46,6 +47,7 @@ namespace json_data
     class JsonNull : public JsonValue {
     public:
         Type type() const override { return Type::Null; };
+        std::string toString() const override;
     };
 
 // --- String ---
@@ -55,6 +57,7 @@ namespace json_data
         explicit JsonString(std::string v) ;
         Type type() const override { return Type::String; };
         const std::string& asString() const override { return value_; };
+        std::string toString() const override;
     };
 
 // --- Number (double) ---
@@ -64,6 +67,7 @@ namespace json_data
         explicit JsonNumber(double v) ;
         Type type() const override { return Type::Number; };
         double asNumber() const override { return value_; };
+        std::string toString() const override;
     };
 
 // --- Bool ---
@@ -73,6 +77,7 @@ namespace json_data
         explicit JsonBool(bool v) ;
         Type type() const override { return Type::Bool; };
         bool asBool() const override { return value_; };
+        std::string toString() const override;
     };
 
 // --- Object (key:value) ---
@@ -85,6 +90,7 @@ namespace json_data
         JsonValue* findMutable(const std::string& key) ;
         const JsonValueMapData& asObject() const override { return members_; };
         JsonValueMapData& asObjectMutable() override { return members_; };
+        std::string toString() const override;
     };
 
 // --- Array ---
@@ -98,6 +104,7 @@ namespace json_data
         JsonValue* atMutable(size_t index) ;
         const JsonValueArrayData& asArray() const override { return items_; }
         JsonValueArrayData& asArrayMutable() override { return items_; }
+        std::string toString() const override;
     };
 
 // ---

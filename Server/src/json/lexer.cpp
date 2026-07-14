@@ -73,6 +73,7 @@ namespace parser
 
         throw LexerError("Unclosed string", m_stream.position());
     }
+
     std::string LexerString::readSymbols()
     {
         std::string ret_value;

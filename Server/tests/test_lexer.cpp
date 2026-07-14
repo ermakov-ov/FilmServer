@@ -1,14 +1,12 @@
-
 #include <gtest/gtest.h>
-#include "../src/json/lexer.h"
-#include "../src/json/stream.h"
-#include "../src/common/common.h"
 #include <memory>
 #include <cstring>
+#include "../src/json/lexer.h"
+#include "../src/json/stream.h"
+
 
 using namespace parser;
 
-// Вспомогательная функция для создания потока из строки
 StreamBuffer makeStream(const std::string& data)
 {
     auto ptr = std::make_unique<char[]>(data.size() + 1);
@@ -22,20 +20,16 @@ TEST(LexerTest, SkipWhitespaceAndPeek)
     StreamBuffer stream = makeStream("   {");
     LexerString lexer(stream);
 
-    // peekToken должен пропустить пробелы и вернуть CurlyOpen
     EXPECT_EQ(lexer.peekToken(), TokenType::TT_CurlyOpen);
-    // Позиция должна быть ровно на '{'
     EXPECT_EQ(stream.position(), 3);
 }
 
 TEST(LexerTest, NextTokenConsumes)
 {
-    // Твоя семантика: nextToken берёт токен и двигает позицию
     StreamBuffer stream = makeStream("{   [");
     LexerString lexer(stream);
 
     EXPECT_EQ(lexer.peekToken(), TokenType::TT_CurlyOpen);
-    // После '{' и пропущенных пробелов курсор должен быть на '['
     EXPECT_EQ(stream.position(), 0);
 
     EXPECT_EQ(lexer.nextToken(), TokenType::TT_BracketOpen);
@@ -44,7 +38,6 @@ TEST(LexerTest, NextTokenConsumes)
 
 TEST(LexerTest, ReadStringWithEscape)
 {
-    // Проверяем экранирование и то, что лишние символы не съедены
     StreamBuffer stream = makeStream("\"a\\nb\" extra");
     LexerString lexer(stream);
 
@@ -72,7 +65,6 @@ TEST(LexerTest, ThrowOnUnclosedString)
 
 TEST(LexerTest, IsEofAndPeekEdgeCases)
 {
-    // Проверка граничных условий
     StreamBuffer stream = makeStream("{}");
     LexerString lexer(stream);
 
@@ -81,7 +73,6 @@ TEST(LexerTest, IsEofAndPeekEdgeCases)
 
     lexer.nextToken();
 
-    // Теперь поток должен быть в конце
     EXPECT_TRUE(stream.isEof());
 
     EXPECT_EQ(lexer.nextToken(), TokenType::TT_Unknown);

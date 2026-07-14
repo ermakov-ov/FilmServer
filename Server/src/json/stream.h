@@ -1,7 +1,3 @@
-//
-// Created by eow on 03/07/2026.
-//
-
 #ifndef SERVER_STREAM_H
 #define SERVER_STREAM_H
 

@@ -1,9 +1,10 @@
 #ifndef SERVER_PARSER_NEW_H
 #define SERVER_PARSER_NEW_H
 
+#include <string>
+
 #include "lexer.h"
 #include "json_data.h"
-#include <string>
 
 namespace parser
 {

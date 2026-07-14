@@ -1,15 +1,10 @@
-//
-// Created by eow on 08/07/2026.
-//
 #include "load_json.h"
-
-#include <cstring>
-
-#include "../../json/json_data.h"
-#include "../../json/parser_json.h"
 
 #include <fstream>
 #include <stdexcept>
+
+#include "../../json/json_data.h"
+#include "../../json/parser_json.h"
 
 namespace {
 std::string readFile(const std::string& path)
@@ -25,7 +20,7 @@ std::string readFile(const std::string& path)
 
 } // namespace
 
-void loadDataFromJson(FilmDb& db, const std::string& filmsPath, const std::string& actorsPath)
+void loadDataFromJson(FilmSharedPtr db, const std::string& filmsPath, const std::string& actorsPath)
 {
     {
         auto jsonStr = readFile(actorsPath);
@@ -54,20 +49,15 @@ void loadDataFromJson(FilmDb& db, const std::string& filmsPath, const std::strin
             int id = static_cast<int>(idVal->asNumber());
             std::string name = nameVal->asString();
 
-            db.addActor(Actor{id, std::move(name)});
+            db->addActor(Actor{id, std::move(name)});
         }
     }
-
-
-    // 2. Добавляем директоров
     {
         auto directors = getDefaultDirectors();
         for (const auto& d : directors) {
-            db.addDirector(d);
+            db->addDirector(d);
         }
     }
-
-    // 3. Загрузка фильмов
     {
         auto jsonStr = readFile(filmsPath);
         parser::ParserJson parser(std::move(jsonStr));
@@ -102,16 +92,16 @@ void loadDataFromJson(FilmDb& db, const std::string& filmsPath, const std::strin
             }
 
             Film f;
-            f.id = static_cast<int>(idVal->asNumber());
-            f.title = titleVal->asString();
-            f.releaseYear = static_cast<int>(yearVal->asNumber());
-            f.description = descVal->asString();
+            f.m_id = static_cast<int>(idVal->asNumber());
+            f.m_title = titleVal->asString();
+            f.m_releaseYear = static_cast<int>(yearVal->asNumber());
+            f.m_description = descVal->asString();
 
             // genres
             const auto& genresArr = genresVal->asArray();
             for (const auto& gPtr : genresArr) {
                 if (gPtr && gPtr->isString()) {
-                    f.genres.push_back(gPtr->asString());
+                    f.m_genres.push_back(gPtr->asString());
                 }
             }
 
@@ -119,13 +109,13 @@ void loadDataFromJson(FilmDb& db, const std::string& filmsPath, const std::strin
             const auto& actorsArr = actorsVal->asArray();
             for (const auto& aPtr : actorsArr) {
                 if (aPtr && aPtr->isNumber()) {
-                    f.actorIds.push_back(static_cast<int>(aPtr->asNumber()));
+                    f.m_actorIds.push_back(static_cast<int>(aPtr->asNumber()));
                 }
             }
 
-            f.directorId = static_cast<int>(directorVal->asNumber());
+            f.m_directorId = static_cast<int>(directorVal->asNumber());
 
-            db.addFilm(std::move(f));
+            db->addFilm(std::move(f));
         }
     }
 }

@@ -8,13 +8,13 @@
 #include <vector>
 
 struct Film {
-    int id;
-    std::string title;
-    int releaseYear;
-    std::string description;
+    int                      m_id;
+    std::string              m_title;
+    int                      m_releaseYear;
+    std::string              m_description;
 
-    std::vector<std::string> genres;
-    std::vector<int> actorIds;
-    int directorId;
+    std::vector<std::string> m_genres;
+    std::vector<int>         m_actorIds;
+    int                      m_directorId;
 };
 #endif //JSONPARSER_FILM_H

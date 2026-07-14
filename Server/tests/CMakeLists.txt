@@ -2,6 +2,7 @@ add_executable(my_tests test_lexer.cpp
         test_parser.cpp
         test_films.cpp
         ../src/apps/server/load_json.cpp
+        test_json_serialize.cpp
 )
 
 target_link_libraries(
