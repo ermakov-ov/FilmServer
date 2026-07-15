@@ -8,6 +8,7 @@ add_executable(Server
         thread_pool.h
         file_streamer.cpp
         file_streamer.h
+        ../../common/logger.cpp
 )
 target_link_libraries(Server PRIVATE film_db_lib)
 target_include_directories(Server PRIVATE

@@ -6,11 +6,12 @@
 #include "httplib.h"
 #include "thread_pool.h"
 #include "../film_db/film_db.h"
+#include "load_json.h"
 
 namespace film_server {
     class FilmServer {
     public:
-        explicit FilmServer(int port, std::shared_ptr<FilmDb> db);
+        explicit FilmServer(const film_server::ServerConfig &server_config, std::shared_ptr<FilmDb> db);
         void run();
 
     private:
@@ -20,10 +21,12 @@ namespace film_server {
         void setupActorRoutes();
         void setupVideoEndpoint();
 
-        httplib::Server         m_http_server;
-        const int               m_port;
-        std::shared_ptr<FilmDb> db_;
-        ThreadPool              m_threadpool;
+        std::string getRequestInfodata(const httplib::Request &req) ;
+
+        film_server::ServerConfig m_server_config;
+        httplib::Server           m_http_server;
+        std::shared_ptr<FilmDb>   m_db;
+        ThreadPool                m_threadpool;
     };
 }
 #endif // HORSELINE_FILM_SERVER_H

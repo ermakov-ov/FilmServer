@@ -2,11 +2,19 @@
 
 #include <fstream>
 #include <stdexcept>
+#include <filesystem>
+#include <sstream>
+#include <iostream>
 
 #include "../../json/json_data.h"
 #include "../../json/parser_json.h"
+#include "../common/logger.h"
 
-namespace {
+
+namespace fs = std::filesystem;
+
+namespace film_server {
+
 std::string readFile(const std::string& path)
 {
     std::ifstream file(path);
@@ -18,12 +26,10 @@ std::string readFile(const std::string& path)
                        std::istreambuf_iterator<char>());
 }
 
-} // namespace
-
 void loadDataFromJson(FilmSharedPtr db, const std::string& filmsPath, const std::string& actorsPath)
 {
     {
-        auto jsonStr = readFile(actorsPath);
+        auto jsonStr = film_server::readFile(actorsPath);
         parser::ParserJson parser(jsonStr);
 
         auto parsedRoot = parser.parse();
@@ -53,16 +59,16 @@ void loadDataFromJson(FilmSharedPtr db, const std::string& filmsPath, const std:
         }
     }
     {
-        auto directors = getDefaultDirectors();
+        auto directors = film_server::getDefaultDirectors();
         for (const auto& d : directors) {
             db->addDirector(d);
         }
     }
     {
-        auto jsonStr = readFile(filmsPath);
+        auto jsonStr = film_server::readFile(filmsPath);
         parser::ParserJson parser(std::move(jsonStr));
 
-        auto parsedRoot = parser.parse(); // <-- твой парсер
+        auto parsedRoot = parser.parse();
         const json_data::JsonValue* root = parsedRoot.get();
 
         if (!root || !root->isArray()) {
@@ -89,7 +95,7 @@ void loadDataFromJson(FilmSharedPtr db, const std::string& filmsPath, const std:
                 !genresVal->isArray() || !actorsVal->isArray() ||
                 !directorVal->isNumber()) {
                 continue; // или throw
-            }
+                }
 
             Film f;
             f.m_id = static_cast<int>(idVal->asNumber());
@@ -127,4 +133,104 @@ std::vector<Director> getDefaultDirectors()
         Director{12, "Christopher Nolan"},
         Director{13, "Paul Thomas Anderson"}
     };
+}
+
+
+void loadDataFromConfig(const std::string& configPath, film_server::ServerConfig &server_config)
+{
+    auto jsonStr = film_server::readFile(configPath);
+    parser::ParserJson parser(std::move(jsonStr));
+
+    auto parsedRoot = parser.parse();
+    const json_data::JsonValue* root = parsedRoot.get();
+
+    if (!root || !root->isObject()) {
+        throw std::runtime_error("Couldn't find right structure for config file");
+    }
+
+    const json_data::JsonObject* obj = dynamic_cast<const json_data::JsonObject*>(root);
+    const json_data::JsonObject* dbValue      = dynamic_cast<const json_data::JsonObject*>(obj->find("db"));
+
+    if ( !dbValue || !dbValue->isObject()) {
+        throw std::runtime_error("Couldn't find right structure for config file");
+    }
+    //------------ path
+    const json_data::JsonObject* dbpathes      = dynamic_cast<const json_data::JsonObject*>(dbValue->find("pathes"));
+    if ( dbpathes) {
+        auto actor_patch = dbpathes->find("actors") ;
+        auto film_patch = dbpathes->find("films") ;
+        auto video_patch = dbpathes->find("video") ;
+
+        if ( !actor_patch || !film_patch || !video_patch || !actor_patch->isString() || !film_patch->isString() || !video_patch->isString()) {
+            throw std::runtime_error("Couldn't find right structure for config file (field \"actor\" or \"films\")");
+        }
+
+        server_config.actors_path = actor_patch->asString();
+        server_config.film_path = film_patch->asString();
+        server_config.video_path = video_patch->asString();
+    }
+    //---------- connection
+    const json_data::JsonObject* server_connection = dynamic_cast<const json_data::JsonObject*>(obj->find("connection"));
+    if ( !server_connection || !server_connection->isObject()) {
+        throw std::runtime_error("Couldn't find right structure for config file");
+    }
+    auto port_connection= server_connection->find("port") ;
+
+    if ( !port_connection || !port_connection->isNumber()) {
+        throw std::runtime_error("Couldn't find right structure for config file");
+    }
+    server_config.port = port_connection->asNumber();
+    //-------- log
+    const json_data::JsonObject* log_path = dynamic_cast<const json_data::JsonObject*>(obj->find("logging"));
+
+    if ( !log_path || !log_path->isObject()) {
+        throw std::runtime_error("Couldn't find right structure for config file");
+    }
+    auto log_dir= log_path->find("log_dir") ;
+
+    if ( !log_dir || !log_dir->isString()) {
+        throw std::runtime_error("Couldn't find right structure for config file");
+    }
+    server_config.log_path = log_dir->asString();
+
+}
+
+bool initDailyLogs(const std::string& baseDir)
+{
+    try {
+        std::string logDir = baseDir.empty() ? "." : baseDir;
+        fs::path path(logDir);
+        path /= "log";
+
+        if (!fs::exists(path)) {
+            fs::create_directories(path);
+        }
+
+        auto now = std::chrono::system_clock::now();
+        auto time_t_now = std::chrono::system_clock::to_time_t(now);
+
+        std::stringstream dateStream;
+        dateStream << std::put_time(std::localtime(&time_t_now), "%Y-%m-%d");
+        std::string dateStr = dateStream.str();
+
+        fs::path logFilePath = path;
+        logFilePath /= ("server_" + dateStr + ".log");
+
+        static std::ofstream logFile;
+        logFile.open(logFilePath, std::ios::app);
+
+        if (logFile.is_open()) {
+            Logger::setOutput(&logFile);
+            return true;
+        } else {
+            std::cerr << "Warning: Could not open log file at " << logFilePath << "\n";
+            return false;
+        }
+    }
+    catch (const fs::filesystem_error& e) {
+        std::cerr << "Filesystem error initializing logs: " << e.what() << "\n";
+        return false;
+    }
+}
+
 }
