@@ -54,6 +54,7 @@ std::optional<Film> FilmDb::findFilmByTitle(const std::string& title) const
     if (itFilm == m_filmsById.end()) return std::nullopt;
     return itFilm->second;
 }
+
 void FilmDb::getAllFilms(std::vector<Film> &films) const
 {
     films.clear();

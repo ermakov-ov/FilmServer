@@ -76,7 +76,7 @@ namespace json_data
         }
 
         std::string result;
-        result.reserve(128); // стартовый буфер, дальше сам вырастет
+        result.reserve(128); 
         result += "{";
 
         bool first = true;
@@ -86,9 +86,9 @@ namespace json_data
             }
             first = false;
 
-            result += JsonString(key).toString(); // ключ экранируется как строка
+            result += JsonString(key).toString();
             result += ':';
-            result += valPtr->toString();         // рекурсия для значения
+            result += valPtr->toString();
         }
 
         result += '}';
@@ -128,7 +128,7 @@ namespace json_data
                 result += ',';
             }
             first = false;
-            result += itemPtr->toString(); // рекурсия
+            result += itemPtr->toString();
         }
 
         result += ']';

@@ -27,6 +27,7 @@ public:
     template <typename Func> void visitFilmsByActor(int actorId, Func f) const;
     template <typename Func> void visitFilmsByDirector(int directorId, Func f) const;
     size_t numberFilms() const { return m_filmsById.size(); }
+    size_t numberActors() const { return m_actorsById.size(); }
 
 private:
     std::map<int, Film>                       m_filmsById;

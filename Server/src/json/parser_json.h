@@ -34,8 +34,8 @@ private:
     json_data::JsonValuePtr parseArray();
     json_data::JsonValuePtr parseValue();
 
-    StreamBuffer m_stream;      // Владеет данными (буфером)
-    LexerString  m_lexer;        // Не владеет, просто смотрит на поток
+    StreamBuffer m_stream;
+    LexerString  m_lexer;
 
 };
 

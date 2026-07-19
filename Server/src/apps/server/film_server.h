@@ -21,6 +21,8 @@ namespace film_server {
         void setupActorRoutes();
         void setupVideoEndpoint();
 
+        void getListFilms(httplib::Response &res) const;
+
         std::string getRequestInfodata(const httplib::Request &req) ;
 
         film_server::ServerConfig m_server_config;

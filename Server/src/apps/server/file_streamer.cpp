@@ -4,7 +4,6 @@ namespace film_server {
     FileStreamer::FileStreamer(const std::string& path)
     : m_file(path, std::ios::binary)
     {
-
     }
 
     bool FileStreamer::isValid() const

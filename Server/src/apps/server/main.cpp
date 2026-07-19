@@ -37,7 +37,6 @@ int main(int argc, char* argv[])
     }
     catch (std::invalid_argument &e) {
         const std::string msg = std::string("Command line error :") + e.what();
-        //std::cerr << msg << std::endl;
         logError(msg) ;
     }
     catch (std::runtime_error &e) {

@@ -11,6 +11,27 @@
 #include "../common/logger.h"
 
 
+namespace JsonKeys {
+const char *kId          = "id";
+const char *kName        = "name";
+const char *kTitle       = "title";
+const char *kYear        = "releaseYear";
+const char *kDescription = "description";
+const char *kGenres      = "genres";
+const char *kActorId     = "actorIds";
+const char *kDirectorId  = "directorId";
+const char *kActors      = "actors";
+const char *kFilms       = "films";
+const char *kVideo       = "video";
+const char *kDb          = "db";
+const char *kPathes      = "pathes";
+const char *kPort        = "port";
+const char *kLogging     = "logging";
+const char *kConnection  = "connection";
+const char *kLogDir      = "log_dir";
+
+};
+
 namespace fs = std::filesystem;
 
 namespace film_server {
@@ -44,12 +65,11 @@ void loadDataFromJson(FilmSharedPtr db, const std::string& filmsPath, const std:
             if (!itemPtr || !itemPtr->isObject()) continue;
             const auto* obj = dynamic_cast<json_data::JsonObject*>(itemPtr.get());
 
-            // Получаем поля через find
-            const json_data::JsonValue* idVal = obj->find("id");
-            const json_data::JsonValue* nameVal = obj->find("name");
+            const json_data::JsonValue* idVal = obj->find(JsonKeys::kId);
+            const json_data::JsonValue* nameVal = obj->find(JsonKeys::kName);
 
             if (!idVal || !nameVal || !idVal->isNumber() || !nameVal->isString()) {
-                continue; // или throw, если хочешь строгую валидацию
+                continue;
             }
 
             int id = static_cast<int>(idVal->asNumber());
@@ -80,13 +100,13 @@ void loadDataFromJson(FilmSharedPtr db, const std::string& filmsPath, const std:
             if (!itemPtr || !itemPtr->isObject()) continue;
             const auto* obj = dynamic_cast<json_data::JsonObject*>(itemPtr.get());
 
-            const json_data::JsonValue* idVal       = obj->find("id");
-            const json_data::JsonValue* titleVal     = obj->find("title");
-            const json_data::JsonValue* yearVal      = obj->find("releaseYear");
-            const json_data::JsonValue* descVal      = obj->find("description");
-            const json_data::JsonValue* genresVal    = obj->find("genres");
-            const json_data::JsonValue* actorsVal    = obj->find("actorIds");
-            const json_data::JsonValue* directorVal  = obj->find("directorId");
+            const json_data::JsonValue* idVal       = obj->find(JsonKeys::kId);
+            const json_data::JsonValue* titleVal     = obj->find(JsonKeys::kTitle);
+            const json_data::JsonValue* yearVal      = obj->find(JsonKeys::kYear);
+            const json_data::JsonValue* descVal      = obj->find(JsonKeys::kDescription);
+            const json_data::JsonValue* genresVal    = obj->find(JsonKeys::kGenres);
+            const json_data::JsonValue* actorsVal    = obj->find(JsonKeys::kActorId);
+            const json_data::JsonValue* directorVal  = obj->find(JsonKeys::kDirectorId);
 
             if (!idVal || !titleVal || !yearVal || !descVal ||
                 !genresVal || !actorsVal || !directorVal ||
@@ -125,6 +145,7 @@ void loadDataFromJson(FilmSharedPtr db, const std::string& filmsPath, const std:
         }
     }
 }
+
 std::vector<Director> getDefaultDirectors()
 {
     return {
@@ -134,7 +155,6 @@ std::vector<Director> getDefaultDirectors()
         Director{13, "Paul Thomas Anderson"}
     };
 }
-
 
 void loadDataFromConfig(const std::string& configPath, film_server::ServerConfig &server_config)
 {
@@ -149,17 +169,18 @@ void loadDataFromConfig(const std::string& configPath, film_server::ServerConfig
     }
 
     const json_data::JsonObject* obj = dynamic_cast<const json_data::JsonObject*>(root);
-    const json_data::JsonObject* dbValue      = dynamic_cast<const json_data::JsonObject*>(obj->find("db"));
+    const json_data::JsonObject* dbValue      = dynamic_cast<const json_data::JsonObject*>(obj->find(JsonKeys::kDb));
 
     if ( !dbValue || !dbValue->isObject()) {
         throw std::runtime_error("Couldn't find right structure for config file");
     }
     //------------ path
-    const json_data::JsonObject* dbpathes      = dynamic_cast<const json_data::JsonObject*>(dbValue->find("pathes"));
+    const json_data::JsonObject* dbpathes      = dynamic_cast<const json_data::JsonObject*>(dbValue->find(JsonKeys::kPathes));
     if ( dbpathes) {
-        auto actor_patch = dbpathes->find("actors") ;
-        auto film_patch = dbpathes->find("films") ;
-        auto video_patch = dbpathes->find("video") ;
+
+        auto actor_patch = dbpathes->find(JsonKeys::kActors) ;
+        auto film_patch  = dbpathes->find(JsonKeys::kFilms) ;
+        auto video_patch = dbpathes->find(JsonKeys::kVideo) ;
 
         if ( !actor_patch || !film_patch || !video_patch || !actor_patch->isString() || !film_patch->isString() || !video_patch->isString()) {
             throw std::runtime_error("Couldn't find right structure for config file (field \"actor\" or \"films\")");
@@ -170,29 +191,29 @@ void loadDataFromConfig(const std::string& configPath, film_server::ServerConfig
         server_config.video_path = video_patch->asString();
     }
     //---------- connection
-    const json_data::JsonObject* server_connection = dynamic_cast<const json_data::JsonObject*>(obj->find("connection"));
+    const json_data::JsonObject* server_connection = dynamic_cast<const json_data::JsonObject*>(obj->find(JsonKeys::kConnection));
     if ( !server_connection || !server_connection->isObject()) {
         throw std::runtime_error("Couldn't find right structure for config file");
     }
-    auto port_connection= server_connection->find("port") ;
+
+    auto port_connection= server_connection->find(JsonKeys::kPort) ;
 
     if ( !port_connection || !port_connection->isNumber()) {
         throw std::runtime_error("Couldn't find right structure for config file");
     }
     server_config.port = port_connection->asNumber();
     //-------- log
-    const json_data::JsonObject* log_path = dynamic_cast<const json_data::JsonObject*>(obj->find("logging"));
+    const json_data::JsonObject* log_path = dynamic_cast<const json_data::JsonObject*>(obj->find(JsonKeys::kLogging));
 
     if ( !log_path || !log_path->isObject()) {
         throw std::runtime_error("Couldn't find right structure for config file");
     }
-    auto log_dir= log_path->find("log_dir") ;
+    auto log_dir= log_path->find(JsonKeys::kLogDir) ;
 
     if ( !log_dir || !log_dir->isString()) {
         throw std::runtime_error("Couldn't find right structure for config file");
     }
     server_config.log_path = log_dir->asString();
-
 }
 
 bool initDailyLogs(const std::string& baseDir)
