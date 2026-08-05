@@ -11,10 +11,12 @@ struct ServerConfig
     std::string actors_path;
     std::string film_path;
     std::string video_path;
-    std::string log_path;
-};
+    std::string directors_path;
+    std::string genres_path;
 
-void loadDataFromJson(FilmSharedPtr db, const std::string& filmsPath, const std::string& actorsPath);
+    std::string log_path;
+
+};
 void loadDataFromConfig(const std::string& configPath, ServerConfig &);
 std::vector<Director> getDefaultDirectors();
 bool initDailyLogs(const std::string& baseDir);

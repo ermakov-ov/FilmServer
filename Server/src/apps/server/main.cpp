@@ -18,13 +18,20 @@ int main(int argc, char* argv[])
         CommandLineData command_line = parseCommandLine(argc, argv) ;
         film_server::ServerConfig server_config;
 
+        logInfo("Start FilmServer application.") ;
         film_server::loadDataFromConfig(command_line.config_file, server_config) ;
         film_server::initDailyLogs(server_config.log_path) ;
-        logInfo("Start FilmServer application.") ;
+        logInfo("Load configuration files...") ;
+        logInfo("Load configuration files - Ok.") ;
 
+        logInfo("Load data....") ;
         FilmSharedPtr film_db = std::make_shared<FilmDb>();
-
-        film_server::loadDataFromJson(film_db, server_config.film_path, server_config.actors_path);
+        film_db->loadDbFromJson(server_config.film_path,
+            server_config.actors_path,
+            server_config.directors_path,
+            server_config.genres_path);
+        logInfo("Load data - Ok.") ;
+        logInfo("Start http service...") ;
 
         film_server::FilmServer svr(server_config, film_db);
 

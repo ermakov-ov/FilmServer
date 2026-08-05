@@ -1,7 +1,24 @@
+
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Network)
+
 add_executable(Player
         main.cpp
-        player_logic.cpp
-        http_client.cpp
+        main_window.cpp
+        load_config.cpp
+        ../../common/logger.cpp
 )
 # Подключаем только то, что реально нужно плееру
-target_link_libraries(Player PRIVATE common json_lib)
+target_link_libraries(Player PRIVATE
+        json_lib
+        Qt6::Core
+        Qt6::Gui
+        Qt6::Widgets
+        Qt6::Network
+)
+
+set_target_properties(Player PROPERTIES
+        AUTOMOC ON
+        AUTOUIC ON
+        AUTORCC ON
+)
+

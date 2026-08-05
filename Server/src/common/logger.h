@@ -12,11 +12,13 @@ enum class LogLevel { DEBUG, INFO, WARN, ERROR };
 class Logger {
 public:
     // Устанавливаем поток вывода (по умолчанию уже стоит cerr в .cpp)
-    static void setOutput(std::ostream* out) {
+    static void setOutput(std::ostream* out)
+    {
         output_stream_ = (out ? out : &std::cerr);
     }
 
-    static void log(LogLevel level, const std::string& message) {
+    static void log(LogLevel level, const std::string& message)
+    {
         // Если вдруг забыли инициализировать (хотя в .cpp мы это делаем всегда)
         if (!output_stream_) {
             return;
@@ -26,12 +28,16 @@ public:
         auto time = std::chrono::system_clock::to_time_t(now);
 
         std::stringstream ss;
-        ss << std::put_time(std::localtime(&time), "%H:%M:%S")
+        ss << std::put_time(std::localtime(&time), "%d-%m-%Y %H:%M:%S")
            << " [" << levelToString(level) << "] "
            << message << "\n";
 
         *output_stream_ << ss.str();
         output_stream_->flush();
+        if (output_stream_ != &std::cout) {
+            std::cout<<ss.str();
+            std::cout.flush();
+        }
     }
 
 private:

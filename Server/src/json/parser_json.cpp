@@ -57,24 +57,26 @@ namespace parser
         {
             token_type = m_lexer.nextToken() ;
 
-            //--------- "_______" -----------
-            if ( token_type != TokenType::TT_String)
-            {
-                throw ParseError("Expected '\"' ", m_stream.position());
-            }
+            if (token_type != TokenType::TT_CurlyClose ) {
+                //--------- "_______" -----------
+                if ( token_type != TokenType::TT_String)
+                {
+                    throw ParseError("Expected '\"' ", m_stream.position());
+                }
 
-            std::string title_object = m_lexer.readString();
-            //--------- : -----------------
-            m_lexer.expect(TokenType::TT_Colon);
-            //-------- right value -----------------
-            m_lexer.nextToken();
-            json_data::JsonValuePtr value = parseValue();
-            objRef.setMember(title_object, std::move(value));
-            token_type = m_lexer.nextToken();
-            //-------- , -----------
-            if ( token_type != TokenType::TT_Comma && token_type != TokenType::TT_CurlyClose)
-            {
-                throw ParseError("Expected ',' or '}'", m_stream.position());
+                std::string title_object = m_lexer.readString();
+                //--------- : -----------------
+                m_lexer.expect(TokenType::TT_Colon);
+                //-------- right value -----------------
+                m_lexer.nextToken();
+                json_data::JsonValuePtr value = parseValue();
+                objRef.setMember(title_object, std::move(value));
+                token_type = m_lexer.nextToken();
+                //-------- , -----------
+                if ( token_type != TokenType::TT_Comma && token_type != TokenType::TT_CurlyClose)
+                {
+                    throw ParseError("Expected ',' or '}'", m_stream.position());
+                }
             }
         }
         while (token_type != TokenType::TT_CurlyClose) ;
@@ -95,14 +97,16 @@ namespace parser
 
         do
         {
-            m_lexer.nextToken();
-            json_data::JsonValuePtr value = parseValue();
-            arrRef.pushBack(std::move(value));
             token_type = m_lexer.nextToken();
+            if ( token_type != TokenType::TT_BracketClose) {
+                json_data::JsonValuePtr value = parseValue();
+                arrRef.pushBack(std::move(value));
+                token_type = m_lexer.nextToken();
 
-            if ( token_type != TokenType::TT_Comma && token_type != TokenType::TT_BracketClose)
-            {
-                throw ParseError("Expected ',' or ']'", m_stream.position());
+                if ( token_type != TokenType::TT_Comma && token_type != TokenType::TT_BracketClose)
+                {
+                    throw ParseError("Expected ',' or ']'", m_stream.position());
+                }
             }
         }
         while (token_type != TokenType::TT_BracketClose) ;
@@ -135,20 +139,20 @@ namespace parser
                 std::string number_str = m_lexer.readSymbols();
                 {
                     bool value = false ;
-                    if ( parser_common::isBooleanValue(number_str, value)  == true)
+                    if ( common::isBooleanValue(number_str, value)  == true)
                     {
                         return json_data::JsonFactory::makeBool(value) ;
                     }
                 }
                 {
-                    if ( parser_common::isNullValue(number_str)  == true)
+                    if ( common::isNullValue(number_str)  == true)
                     {
                         return json_data::JsonFactory::makeNull() ;
                     }
                 }
                 {
                     double num = 0.0 ;
-                    if ( parser_common::convertToNumber(number_str, num) == true)
+                    if ( common::convertToNumber(number_str, num) == true)
                     {
                         return json_data::JsonFactory::makeNumber(num) ;
                     }

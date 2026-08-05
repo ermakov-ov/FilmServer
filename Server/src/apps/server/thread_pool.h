@@ -16,6 +16,9 @@ namespace film_server {
         explicit ThreadPool(std::size_t num_threads);
         ~ThreadPool();
 
+        std::size_t numbers_threads() const { return m_workers.size(); }
+        std::size_t numbers_tasks() const { return m_tasks.size(); }
+
         template <typename F>
         void enqueue(F&& f)
         {

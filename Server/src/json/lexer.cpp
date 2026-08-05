@@ -41,7 +41,7 @@ namespace parser
 
     std::string LexerString::readString()
     {
-        if (!parser_common::isDoubleQuotes(m_stream.peek()))
+        if (!common::isDoubleQuotes(m_stream.peek()))
         {
             throw LexerError("Expected double quote", m_stream.position());
         }
@@ -50,7 +50,7 @@ namespace parser
         for (m_stream.next(); m_stream.isEof() == false; m_stream.next())
         {
             char ch = m_stream.peek();
-            if (parser_common::isDoubleQuotes(ch))
+            if (common::isDoubleQuotes(ch))
             {
                 return result ;
             }
@@ -79,7 +79,7 @@ namespace parser
         std::string ret_value;
 
         char ch = m_stream.peek() ;
-        if (parser_common::isCharDigit(ch) == false)
+        if (common::isCharDigit(ch) == false)
         {
             throw LexerError("Invalid number format", m_stream.position() );
         }
@@ -88,7 +88,7 @@ namespace parser
         for (m_stream.next(); m_stream.isEof() == false; m_stream.next())
         {
             ch = m_stream.peek();
-            if ( parser_common::isCharDigit(ch) == true )
+            if ( common::isCharDigit(ch) == true )
             {
                 ret_value.push_back(ch);
             }
@@ -115,7 +115,7 @@ namespace parser
         while (!m_stream.isEof())
         {
             char c = m_stream.peek();
-            if (!parser_common::isEmptyChar(c))
+            if (!common::isEmptyChar(c))
             {
                 break;
             }
@@ -145,7 +145,7 @@ namespace parser
                 return TokenType::TT_QuoteSingle;
 
             default:
-                if (parser_common::isCharDigit(c) || c == '-')
+                if (common::isCharDigit(c) || c == '-')
                 {
                     return TokenType::TT_Number;
                 }

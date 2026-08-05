@@ -1,0 +1,102 @@
+[
+  {
+    "id": 1,
+    "name": "Christopher Nolan"
+  },
+  {
+    "id": 2,
+    "name": "Quentin Tarantino"
+  },
+  {
+    "id": 3,
+    "name": "Martin Scorsese"
+  },
+  {
+    "id": 4,
+    "name": "Steven Spielberg"
+  },
+  {
+    "id": 5,
+    "name": "Ridley Scott"
+  },
+  {
+    "id": 6,
+    "name": "James Cameron"
+  },
+  {
+    "id": 7,
+    "name": "Wes Anderson"
+  },
+  {
+    "id": 8,
+    "name": "David Fincher"
+  },
+  {
+    "id": 9,
+    "name": "Coen Brothers"
+  },
+  {
+    "id": 10,
+    "name": "Denis Villeneuve"
+  },
+  {
+    "id": 11,
+    "name": "Alfred Hitchcock"
+  },
+  {
+    "id": 12,
+    "name": "Stanley Kubrick"
+  },
+  {
+    "id": 13,
+    "name": "Francis Ford Coppola"
+  },
+  {
+    "id": 14,
+    "name": "Woody Allen"
+  },
+  {
+    "id": 15,
+    "name": "Pedro Almodóvar"
+  },
+  {
+    "id": 16,
+    "name": "Bong Joon-ho"
+  },
+  {
+    "id": 17,
+    "name": "Greta Gerwig"
+  },
+  {
+    "id": 18,
+    "name": "Paul Thomas Anderson"
+  },
+  {
+    "id": 19,
+    "name": "Spike Lee"
+  },
+  {
+    "id": 20,
+    "name": "Guillermo del Toro"
+  },
+  {
+    "id": 21,
+    "name": "Zack Snyder"
+  },
+  {
+    "id": 22,
+    "name": "Ron Howard"
+  },
+  {
+    "id": 23,
+    "name": "Clint Eastwood"
+  },
+  {
+    "id": 24,
+    "name": "Robert Zemeckis"
+  },
+  {
+    "id": 25,
+    "name": "Taika Waititi"
+  }
+]

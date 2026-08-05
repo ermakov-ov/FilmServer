@@ -24,75 +24,92 @@ void FilmServer::run()
         std::cerr << "Failed to start server\n";
     }
 }
+
 void FilmServer::setupRoutes()
 {
-    setupStatsRoutes();
-    setupFilmRoutes();
-    setupActorRoutes();
-    setupVideoEndpoint();
+    setupStatsRoutesV1();
+    setupVideoEndpointV1();
+    setupSearchRoutesV1();
 }
 
-void FilmServer::setupStatsRoutes()
+void FilmServer::setupStatsRoutesV1()
 {
-    m_http_server.Get("/stats",
+    m_http_server.Get("/api/v1/stats",
      [this](const httplib::Request &req, httplib::Response &res) {
 
-         logInfo(getRequestInfodata(req)) ;
-         size_t total = m_db->numberFilms();
+         ++m_stat_counter.all_request;
+         logInfo(getRequestInfoData(req)) ;
 
-         res.set_content(response::stats(total), "application/json");
-     });
-}
+         auto film_stat = getFilmServerStatStat();
+         auto film_db_stat = m_db->getFilmDbStat();
 
-void FilmServer::setupFilmRoutes()
-{
-    m_http_server.Get("/films",
-             [this](const httplib::Request &req, httplib::Response &res) {
-
-         logInfo(getRequestInfodata(req)) ;
-         auto fut = m_threadpool.submit([this, &res]() {
-             getListFilms(res) ;
-         });
-         try {
-             fut.get();
-             res.status = 200 ;
-         }
-         catch (...) {
+         json_data::JsonValuePtr response_jsn(std::move(response::stats_answer(film_stat.value(), film_db_stat.value()))) ;
+         if (response_jsn.get() == nullptr) {
+             ++m_stat_counter.errors_request;
              logError("Unknown error for \"films\" request") ;
              res.set_content("Unknown error for request", "text/plain");
              res.status = 500;
+             return ;
          }
-
+         res.set_content(std::move(response_jsn->toString()), "application/json");
      });
 }
 
-void FilmServer::setupActorRoutes()
+void FilmServer::setupSearchRoutesV1()
 {
-    m_http_server.Get("/actors",
+    m_http_server.Get("/api/v1/search",
              [this](const httplib::Request &req, httplib::Response &res) {
 
-         logInfo(getRequestInfodata(req)) ;
-         res.set_content(response::actors(m_db->numberActors()), "application/json");
+                 ++m_stat_counter.all_request;
+                 logInfo(getRequestInfoData(req)) ;
+                 std::string title = req.get_param_value("by_title");
+                 std::string actorCsv = req.get_param_value("by_actor");
+                 std::string director =  req.get_param_value("by_director");
+                 std::string genre = req.get_param_value("by_genre");
+
+                 auto results = m_db->searchFilms(title, actorCsv, director, genre);
+
+                 if ( results.empty() ) {
+                     res.set_content(std::move(response::error_answer(100, "No data found")->toString()), "application/json");
+                     return ;
+                 }
+                 std::vector<common::FilmAnswer> answer_result;
+                 m_db->convertToFilmsAnswer(results, answer_result) ;
+
+                 json_data::JsonValuePtr response_jsn(std::move(response::films_answer(answer_result))) ;
+                 if (response_jsn.get() == nullptr) {
+                     ++m_stat_counter.errors_request;
+                     logError("Unknown error for \"films\" request") ;
+                     res.set_content("Unknown error for request", "text/plain");
+                     res.status = 500;
+                     return ;
+                 }
+
+                 res.set_content(std::move(response_jsn->toString()), "application/json");
     });
 }
 
-void FilmServer::setupVideoEndpoint()
+void FilmServer::setupVideoEndpointV1()
 {
-    m_http_server.Get("/video", [this](const httplib::Request &req,
+    m_http_server.Get("/api/v1/video", [this](const httplib::Request &req,
                               httplib::Response &res){
+        ++m_stat_counter.all_request;
 
-        logInfo(getRequestInfodata(req)) ;
-        auto id = req.get_param_value("id");
-        if (id.empty()) {
+        logInfo(getRequestInfoData(req)) ;
+
+        std::string idFilm = req.get_param_value("by_number");
+        if (idFilm.empty()) {
+            ++m_stat_counter.errors_request;
             res.status = 400;
             logError("Missing 'id' parameter");
             res.set_content("Missing 'id' parameter", "text/plain");
             return;
         }
-        std::string path = m_server_config.video_path + "/" + id + ".mp4";
+        std::string path = m_server_config.video_path + "/" + idFilm + ".mp4";
         FileStreamer probe(path);
 
         if (!probe.isValid()) {
+            ++m_stat_counter.errors_request;
             logError("File " + path + " does not exist.");
             res.status = 404;
             res.set_content("File not found", "text/plain");
@@ -103,49 +120,63 @@ void FilmServer::setupVideoEndpoint()
         logInfo("Start sending " + path + "...") ;
 
         res.set_chunked_content_provider("video/mp4",
-            [streamer = std::make_shared<FileStreamer>(path)](size_t /*offset*/, httplib::DataSink &sink) mutable -> bool {
+    [streamer = std::make_shared<FileStreamer>(path)](size_t /*offset*/, httplib::DataSink &sink) mutable -> bool {
                 if (!streamer || !streamer->isValid()) {
-                    logError("File does not exist.");
+                    logError("File does not exist or streamer invalid.");
                     return false;
                 }
 
-                char buffer[1024 * 1024];
+                char buffer[1024 * 1024]; // 1 MB
                 auto count = streamer->readChunk(buffer, sizeof(buffer));
 
                 if (count == 0) {
-                    streamer.reset(); // освобождаем заранее
-                    return false;     // конец потока
+                    return false;
                 }
 
-                sink.write(buffer, count);
-                return true;
+                // Отдаём чанк
+                if (!sink.write(buffer, count)) {
+                    logWarn("Client disconnected while streaming.");
+                    return false;
+                }
+
+                return true; // Есть ещё данные — просим следующий чанк
             },
             [path](bool success) {
                 if (success) {
                     logDebug("Video stream completed: " + path);
-                }
-                else {
-                    logWarn("Video stream interrupted: " + path);
+                } else {
+                    // Это срабатывает, если лямбда вернула false.
+                    // Важно: false — это не всегда ошибка. EOF — это success = true по смыслу.
+                    // Но httplib передаёт сюда результат работы лямбды, а не «ошибку».
+                    // Поэтому лучше трактовать так: если мы дошли сюда — поток завершён.
+                    logInfo("Video stream finished: " + path);
                 }
             }
         );
-
         logInfo("Finish sending " + path + "...") ;
     });
 }
 
-void FilmServer::getListFilms(httplib::Response &res) const
-{
-    std::vector<Film> films;
-    m_db->getAllFilms(films);
-
-    res.set_content(response::films(films), "application/json");
-}
-
-std::string FilmServer::getRequestInfodata(const httplib::Request &req)
+std::string FilmServer::getRequestInfoData(const httplib::Request &req)
 {
     std::string res("Method - ");
     res += req.method + ", target - " + req.target +", remote address - " + req.remote_addr   ;
     return res;
 }
+
+std::optional<FilmServerStat> FilmServer::getFilmServerStatStat() const
+{
+    FilmServerStat stat;
+
+    stat.pf_active_workers = m_threadpool.numbers_threads();
+    stat.pf_requests_total = m_stat_counter.all_request;
+    stat.pf_avg_response_time_ms = 0.0;
+    stat.pf_errors_total = m_stat_counter.errors_request;
+
+    stat.pf_queue_length = m_threadpool.numbers_threads();
+    stat.pf_avg_response_time_ms = 0;
+
+    return stat;
+}
+
 }

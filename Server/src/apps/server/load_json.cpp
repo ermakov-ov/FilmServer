@@ -9,206 +9,75 @@
 #include "../../json/json_data.h"
 #include "../../json/parser_json.h"
 #include "../common/logger.h"
+#include "../common/common.h"
 
-
-namespace JsonKeys {
-const char *kId          = "id";
-const char *kName        = "name";
-const char *kTitle       = "title";
-const char *kYear        = "releaseYear";
-const char *kDescription = "description";
-const char *kGenres      = "genres";
-const char *kActorId     = "actorIds";
-const char *kDirectorId  = "directorId";
-const char *kActors      = "actors";
-const char *kFilms       = "films";
-const char *kVideo       = "video";
-const char *kDb          = "db";
-const char *kPathes      = "pathes";
-const char *kPort        = "port";
-const char *kLogging     = "logging";
-const char *kConnection  = "connection";
-const char *kLogDir      = "log_dir";
-
-};
 
 namespace fs = std::filesystem;
 
 namespace film_server {
 
-std::string readFile(const std::string& path)
-{
-    std::ifstream file(path);
-    if (!file.is_open())
-    {
-        throw std::runtime_error("Cannot open file: " + path);
-    }
-    return std::string((std::istreambuf_iterator<char>(file)),
-                       std::istreambuf_iterator<char>());
-}
-
-void loadDataFromJson(FilmSharedPtr db, const std::string& filmsPath, const std::string& actorsPath)
-{
-    {
-        auto jsonStr = film_server::readFile(actorsPath);
-        parser::ParserJson parser(jsonStr);
-
-        auto parsedRoot = parser.parse();
-        const json_data::JsonValue* root = parsedRoot.get();
-
-        if (!root || !root->isArray()) {
-            throw std::runtime_error("actors.json must be an array");
-        }
-
-        const auto& arr = root->asArray();
-        for (const auto& itemPtr : arr) {
-            if (!itemPtr || !itemPtr->isObject()) continue;
-            const auto* obj = dynamic_cast<json_data::JsonObject*>(itemPtr.get());
-
-            const json_data::JsonValue* idVal = obj->find(JsonKeys::kId);
-            const json_data::JsonValue* nameVal = obj->find(JsonKeys::kName);
-
-            if (!idVal || !nameVal || !idVal->isNumber() || !nameVal->isString()) {
-                continue;
-            }
-
-            int id = static_cast<int>(idVal->asNumber());
-            std::string name = nameVal->asString();
-
-            db->addActor(Actor{id, std::move(name)});
-        }
-    }
-    {
-        auto directors = film_server::getDefaultDirectors();
-        for (const auto& d : directors) {
-            db->addDirector(d);
-        }
-    }
-    {
-        auto jsonStr = film_server::readFile(filmsPath);
-        parser::ParserJson parser(std::move(jsonStr));
-
-        auto parsedRoot = parser.parse();
-        const json_data::JsonValue* root = parsedRoot.get();
-
-        if (!root || !root->isArray()) {
-            throw std::runtime_error("films.json must be an array");
-        }
-
-        const auto& arr = root->asArray();
-        for (const auto& itemPtr : arr) {
-            if (!itemPtr || !itemPtr->isObject()) continue;
-            const auto* obj = dynamic_cast<json_data::JsonObject*>(itemPtr.get());
-
-            const json_data::JsonValue* idVal       = obj->find(JsonKeys::kId);
-            const json_data::JsonValue* titleVal     = obj->find(JsonKeys::kTitle);
-            const json_data::JsonValue* yearVal      = obj->find(JsonKeys::kYear);
-            const json_data::JsonValue* descVal      = obj->find(JsonKeys::kDescription);
-            const json_data::JsonValue* genresVal    = obj->find(JsonKeys::kGenres);
-            const json_data::JsonValue* actorsVal    = obj->find(JsonKeys::kActorId);
-            const json_data::JsonValue* directorVal  = obj->find(JsonKeys::kDirectorId);
-
-            if (!idVal || !titleVal || !yearVal || !descVal ||
-                !genresVal || !actorsVal || !directorVal ||
-                !idVal->isNumber() || !titleVal->isString() ||
-                !yearVal->isNumber() || !descVal->isString() ||
-                !genresVal->isArray() || !actorsVal->isArray() ||
-                !directorVal->isNumber()) {
-                continue; // или throw
-                }
-
-            Film f;
-            f.m_id = static_cast<int>(idVal->asNumber());
-            f.m_title = titleVal->asString();
-            f.m_releaseYear = static_cast<int>(yearVal->asNumber());
-            f.m_description = descVal->asString();
-
-            // genres
-            const auto& genresArr = genresVal->asArray();
-            for (const auto& gPtr : genresArr) {
-                if (gPtr && gPtr->isString()) {
-                    f.m_genres.push_back(gPtr->asString());
-                }
-            }
-
-            // actorIds
-            const auto& actorsArr = actorsVal->asArray();
-            for (const auto& aPtr : actorsArr) {
-                if (aPtr && aPtr->isNumber()) {
-                    f.m_actorIds.push_back(static_cast<int>(aPtr->asNumber()));
-                }
-            }
-
-            f.m_directorId = static_cast<int>(directorVal->asNumber());
-
-            db->addFilm(std::move(f));
-        }
-    }
-}
-
-std::vector<Director> getDefaultDirectors()
-{
-    return {
-        Director{10, "Robert Zemeckis"},
-        Director{11, "Frank Darabont"},
-        Director{12, "Christopher Nolan"},
-        Director{13, "Paul Thomas Anderson"}
-    };
-}
-
 void loadDataFromConfig(const std::string& configPath, film_server::ServerConfig &server_config)
 {
-    auto jsonStr = film_server::readFile(configPath);
+    auto jsonStr = common::readFile(configPath);
     parser::ParserJson parser(std::move(jsonStr));
 
     auto parsedRoot = parser.parse();
     const json_data::JsonValue* root = parsedRoot.get();
 
     if (!root || !root->isObject()) {
+        logError("Couldn't find right structure for config file") ;
         throw std::runtime_error("Couldn't find right structure for config file");
     }
+    logInfo(root->toString()) ;
 
     const json_data::JsonObject* obj = dynamic_cast<const json_data::JsonObject*>(root);
-    const json_data::JsonObject* dbValue      = dynamic_cast<const json_data::JsonObject*>(obj->find(JsonKeys::kDb));
+    const json_data::JsonObject* dbValue      = dynamic_cast<const json_data::JsonObject*>(obj->find(std::string(JsonKeys::kDb)));
 
     if ( !dbValue || !dbValue->isObject()) {
         throw std::runtime_error("Couldn't find right structure for config file");
     }
     //------------ path
-    const json_data::JsonObject* dbpathes      = dynamic_cast<const json_data::JsonObject*>(dbValue->find(JsonKeys::kPathes));
+    const json_data::JsonObject* dbpathes      = dynamic_cast<const json_data::JsonObject*>(dbValue->find(std::string(JsonKeys::kPathes)));
     if ( dbpathes) {
 
-        auto actor_patch = dbpathes->find(JsonKeys::kActors) ;
-        auto film_patch  = dbpathes->find(JsonKeys::kFilms) ;
-        auto video_patch = dbpathes->find(JsonKeys::kVideo) ;
+        auto actor_patch = dbpathes->find(std::string(JsonKeys::kActors)) ;
+        auto film_patch  = dbpathes->find(std::string(JsonKeys::kFilms)) ;
+        auto video_patch = dbpathes->find(std::string(JsonKeys::kVideo)) ;
 
-        if ( !actor_patch || !film_patch || !video_patch || !actor_patch->isString() || !film_patch->isString() || !video_patch->isString()) {
+        auto directors_patch  = dbpathes->find(std::string(JsonKeys::kDirectors)) ;
+        auto genres_patch = dbpathes->find(std::string(JsonKeys::kGenresConfig)) ;
+
+        if ( !actor_patch || !film_patch || !video_patch || !directors_patch || !genres_patch
+            || !actor_patch->isString() || !film_patch->isString() || !video_patch->isString()
+            || !directors_patch->isString() || !genres_patch->isString()) {
             throw std::runtime_error("Couldn't find right structure for config file (field \"actor\" or \"films\")");
         }
 
         server_config.actors_path = actor_patch->asString();
         server_config.film_path = film_patch->asString();
         server_config.video_path = video_patch->asString();
+        server_config.directors_path = directors_patch->asString();
+        server_config.genres_path = genres_patch->asString();
     }
     //---------- connection
-    const json_data::JsonObject* server_connection = dynamic_cast<const json_data::JsonObject*>(obj->find(JsonKeys::kConnection));
+    const json_data::JsonObject* server_connection = dynamic_cast<const json_data::JsonObject*>(obj->find(std::string(JsonKeys::kConnection)));
     if ( !server_connection || !server_connection->isObject()) {
         throw std::runtime_error("Couldn't find right structure for config file");
     }
 
-    auto port_connection= server_connection->find(JsonKeys::kPort) ;
+    auto port_connection= server_connection->find(std::string(JsonKeys::kPort)) ;
 
     if ( !port_connection || !port_connection->isNumber()) {
         throw std::runtime_error("Couldn't find right structure for config file");
     }
     server_config.port = port_connection->asNumber();
     //-------- log
-    const json_data::JsonObject* log_path = dynamic_cast<const json_data::JsonObject*>(obj->find(JsonKeys::kLogging));
+    const json_data::JsonObject* log_path = dynamic_cast<const json_data::JsonObject*>(obj->find(std::string(JsonKeys::kLogging)));
 
     if ( !log_path || !log_path->isObject()) {
         throw std::runtime_error("Couldn't find right structure for config file");
     }
-    auto log_dir= log_path->find(JsonKeys::kLogDir) ;
+    auto log_dir= log_path->find(std::string(JsonKeys::kLogDir)) ;
 
     if ( !log_dir || !log_dir->isString()) {
         throw std::runtime_error("Couldn't find right structure for config file");
