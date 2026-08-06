@@ -1,0 +1,6 @@
+06-08-2026 10:12:04 [ERROR] Network error:Connection refused
+06-08-2026 10:25:06 [ERROR] Network error:Connection refused
+06-08-2026 10:31:49 [ERROR] Network error:Connection refused
+06-08-2026 10:31:58 [INFO] Request to the server:http://127.0.0.1:8080/api/v1/search?by_title=in
+06-08-2026 10:31:58 [ERROR] Network error:Connection refused
+06-08-2026 13:53:50 [INFO] Request to the server:http://127.0.0.1:8080/api/v1/search?by_actor=Chris Evans

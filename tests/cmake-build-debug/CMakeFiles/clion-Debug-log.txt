@@ -1,0 +1,52 @@
+/home/eow/Programm/CLion-2026.1.3/clion-2026.1.3/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/home/eow/Programm/CLion-2026.1.3/clion-2026.1.3/bin/ninja/linux/x64/ninja -G Ninja -S /home/eow/Soft/Education/HorseLine/Server/src/tests -B /home/eow/Soft/Education/HorseLine/Server/src/tests/cmake-build-debug
+CMake Warning (dev) in CMakeLists.txt:
+  No project() command is present.  The top-level CMakeLists.txt file must
+  contain a literal, direct call to the project() command.  Add a line of
+  code such as
+
+    project(ProjectName)
+
+  near the top of the file, but after cmake_minimum_required().
+
+  CMake is pretending there is a "project(Project)" command on the first
+  line.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) in CMakeLists.txt:
+  cmake_minimum_required() should be called prior to this top-level project()
+  call.  Please see the cmake-commands(7) manual for usage documentation of
+  both commands.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- The C compiler identification is GNU 13.3.0
+-- The CXX compiler identification is GNU 13.3.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+CMake Error at /home/eow/Programm/CLion-2026.1.3/clion-2026.1.3/bin/cmake/linux/x64/share/cmake-4.2/Modules/FindPackageHandleStandardArgs.cmake:290 (message):
+  Could NOT find GTest (missing: GTEST_LIBRARY GTEST_INCLUDE_DIR
+  GTEST_MAIN_LIBRARY)
+Call Stack (most recent call first):
+  /home/eow/Programm/CLion-2026.1.3/clion-2026.1.3/bin/cmake/linux/x64/share/cmake-4.2/Modules/FindPackageHandleStandardArgs.cmake:654 (_FPHSA_FAILURE_MESSAGE)
+  /home/eow/Programm/CLion-2026.1.3/clion-2026.1.3/bin/cmake/linux/x64/share/cmake-4.2/Modules/FindGTest.cmake:421 (find_package_handle_standard_args)
+  CMakeLists.txt:1 (find_package)
+
+
+CMake Error in CMakeLists.txt:
+  No cmake_minimum_required command is present.  A line of code such as
+
+    cmake_minimum_required(VERSION 4.2)
+
+  should be added at the top of the file.  The version specified may be lower
+  if you wish to support older CMake versions for this project.  For more
+  information run "cmake --help-policy CMP0000".
+
+
+-- Configuring incomplete, errors occurred!

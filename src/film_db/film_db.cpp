@@ -196,6 +196,16 @@ std::optional<Genre> FilmDb::getGenreById(int id) const
     return std::nullopt;
 }
 
+std::optional<Film> FilmDb::getFilmById(int id) const
+{
+    auto film_id = m_filmsById.find(id);
+
+    if (film_id != m_filmsById.end()) {
+        return film_id->second;
+    }
+    return std::nullopt;
+}
+
 void FilmDb::loadDbFromJson(const std::string& filmsPath,
                           const std::string& actorsPath,
                           const std::string& directorsPath,

@@ -1,0 +1,92 @@
+13:52:51 [INFO] Start FilmServer application.
+13:53:19 [INFO] Method - GET, target - /api/v1/films, remote address - 127.0.0.1
+13:53:25 [ERROR] Unknown error for "films" request
+13:54:01 [INFO] Method - GET, target - /api/v1/stats, remote address - 127.0.0.1
+13:54:14 [ERROR] Unknown error for "films" request
+13:54:29 [INFO] Method - GET, target - /api/v1/stats, remote address - 127.0.0.1
+13:56:03 [INFO] Start FilmServer application.
+13:56:11 [INFO] Method - GET, target - /api/v1/stats, remote address - 127.0.0.1
+13:58:37 [INFO] Start FilmServer application.
+13:58:49 [INFO] Method - GET, target - /api/v1/films, remote address - 127.0.0.1
+25-07-2026 18:01:19 [INFO] Start FilmServer application.
+25-07-2026 18:01:46 [INFO] Start FilmServer application.
+25-07-2026 18:06:42 [INFO] Start FilmServer application.
+25-07-2026 18:06:42 [INFO] Load configuration files...
+25-07-2026 18:06:42 [INFO] Load configuration files - Ok.
+25-07-2026 18:06:42 [INFO] Load data....
+25-07-2026 18:06:42 [INFO] Load data - Ok.
+25-07-2026 18:06:42 [INFO] Start http service...
+25-07-2026 18:09:20 [INFO] Start FilmServer application.
+25-07-2026 18:09:20 [INFO] Load configuration files...
+25-07-2026 18:09:20 [INFO] {"logging":{"log_dir":"./"},"connection":{"port":8080},"db":{"pathes":{"genres":"./data/genres.json","directors":"./data/directors.json","video":"./data/videos","films":"./data/films.json","actors":"./data/actors.json"}}}
+25-07-2026 18:09:20 [INFO] Load configuration files - Ok.
+25-07-2026 18:09:20 [INFO] Load data....
+25-07-2026 18:09:20 [INFO] Load data - Ok.
+25-07-2026 18:09:20 [INFO] Start http service...
+25-07-2026 18:11:02 [INFO] Start FilmServer application.
+25-07-2026 18:11:02 [INFO] Load configuration files...
+25-07-2026 18:11:02 [INFO] {"logging":{"log_dir":"./"}
+,"connection":{"port":8080}
+,"db":{"pathes":{"genres":"./data/genres.json","directors":"./data/directors.json","video":"./data/videos","films":"./data/films.json","actors":"./data/actors.json"}
+}
+}
+
+25-07-2026 18:11:02 [INFO] Load configuration files - Ok.
+25-07-2026 18:11:02 [INFO] Load data....
+25-07-2026 18:11:02 [INFO] Load data - Ok.
+25-07-2026 18:11:02 [INFO] Start http service...
+25-07-2026 18:11:33 [INFO] Start FilmServer application.
+25-07-2026 18:11:33 [INFO] Load configuration files...
+25-07-2026 18:11:33 [INFO] {"logging":{"log_dir":"./"
+}
+
+,"connection":{"port":8080
+}
+
+,"db":{"pathes":{"genres":"./data/genres.json"
+,"directors":"./data/directors.json"
+,"video":"./data/videos"
+,"films":"./data/films.json"
+,"actors":"./data/actors.json"
+}
+
+}
+
+}
+
+25-07-2026 18:11:33 [INFO] Load configuration files - Ok.
+25-07-2026 18:11:33 [INFO] Load data....
+25-07-2026 18:11:33 [INFO] Load data - Ok.
+25-07-2026 18:11:33 [INFO] Start http service...
+25-07-2026 18:12:06 [INFO] Start FilmServer application.
+25-07-2026 18:12:06 [INFO] Load configuration files...
+25-07-2026 18:12:06 [INFO] {"logging":{"log_dir":"./"},"connection":{"port":8080},"db":{"pathes":{"genres":"./data/genres.json","directors":"./data/directors.json","video":"./data/videos","films":"./data/films.json","actors":"./data/actors.json"}}}
+25-07-2026 18:12:06 [INFO] Load configuration files - Ok.
+25-07-2026 18:12:06 [INFO] Load data....
+25-07-2026 18:12:06 [INFO] Load data - Ok.
+25-07-2026 18:12:06 [INFO] Start http service...
+25-07-2026 18:13:29 [INFO] Start FilmServer application.
+25-07-2026 18:13:29 [INFO] Load configuration files...
+25-07-2026 18:13:29 [INFO] {"logging":{"log_dir":"./"},"connection":{"port":8080},"db":{"pathes":{"genres":"./data/genres.json","directors":"./data/directors.json","video":"./data/videos","films":"./data/films.json","actors":"./data/actors.json"}}}
+25-07-2026 18:13:29 [INFO] Load configuration files - Ok.
+25-07-2026 18:13:29 [INFO] Load data....
+25-07-2026 18:13:29 [INFO] Load data - Ok.
+25-07-2026 18:13:29 [INFO] Start http service...
+25-07-2026 18:13:37 [INFO] Method - GET, target - /api/v1/search?by_title=Inception&by_actor=Leonardo%20DiCaprio&by_director=Christopher%20Nolan, remote address - 127.0.0.1
+25-07-2026 20:15:53 [INFO] Start FilmServer application.
+25-07-2026 20:15:53 [INFO] Load configuration files...
+25-07-2026 20:15:53 [INFO] {"logging":{"log_dir":"./"},"connection":{"port":8080},"db":{"pathes":{"genres":"./data/genres.json","directors":"./data/directors.json","video":"./data/videos","films":"./data/films.json","actors":"./data/actors.json"}}}
+25-07-2026 20:15:53 [INFO] Load configuration files - Ok.
+25-07-2026 20:15:53 [INFO] Load data....
+25-07-2026 20:15:53 [INFO] Load data - Ok.
+25-07-2026 20:15:53 [INFO] Start http service...
+25-07-2026 20:16:12 [INFO] Method - GET, target - /api/v1/search?by_title=Inception&by_actor=Leonardo%20DiCaprio&by_director=Christopher%20Nolan, remote address - 127.0.0.1
+25-07-2026 20:16:46 [INFO] Method - GET, target - /api/v1/search?by_title=Inception&by_actor=Leonardo%20DiCaprio&by_director=Christopher%20Nolan, remote address - 127.0.0.1
+25-07-2026 20:41:07 [INFO] Start FilmServer application.
+25-07-2026 20:41:07 [INFO] Load configuration files...
+25-07-2026 20:41:07 [INFO] {"logging":{"log_dir":"./"},"connection":{"port":8080},"db":{"pathes":{"genres":"./data/genres.json","directors":"./data/directors.json","video":"./data/videos","films":"./data/films.json","actors":"./data/actors.json"}}}
+25-07-2026 20:41:07 [INFO] Load configuration files - Ok.
+25-07-2026 20:41:07 [INFO] Load data....
+25-07-2026 20:41:34 [INFO] Load data - Ok.
+25-07-2026 20:41:34 [INFO] Start http service...
+25-07-2026 20:41:43 [INFO] Method - GET, target - /api/v1/search?by_title=Inception&by_actor=Leonardo%20DiCaprio&by_director=Christopher%20Nolan, remote address - 127.0.0.1

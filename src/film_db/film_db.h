@@ -59,6 +59,7 @@ public:
     std::optional<Actor> getActorById(int id) const;
     std::optional<Director> getDirectorById(int id) const;
     std::optional<Genre> getGenreById(int id) const;
+    std::optional<Film> getFilmById(int id) const;
     void convertToFilmsAnswer(const std::vector<Film>& movies, std::vector<common::FilmAnswer>& result);
     std::string toLowerCopy(std::string s) const ;
     std::vector<std::string_view> tokenize(const std::string& s) const;

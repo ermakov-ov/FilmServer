@@ -1,0 +1,97 @@
+openapi: 3.0.3
+info:
+  title: Film Server API
+  version: "2.1.0"
+  description: Minimal HTTP server for movies with search, stats, and video streaming.
+
+servers:
+  - url: http://localhost:8080
+    description: Local development
+
+paths:
+  /api/v1/stats:
+    get:
+      summary: Get service and database statistics
+      operationId: getStats
+      responses:
+        '200':
+          description: Statistics successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stats'
+        '500':
+          description: Internal server error
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Unknown error for request"
+
+  /api/v1/search:
+    get:
+      summary: Search movies by title, actor, director, or genre
+      operationId: searchMovies
+      parameters:
+        - name: by_title
+          in: query
+          required: false
+          schema:
+            type: string
+            description: Search by title token (case-insensitive)
+        - name: by_actor
+          in: query
+          required: false
+          schema:
+            type: string
+            description: Comma-separated list of actor names
+        - name: by_director
+          in: query
+          required: false
+          schema:
+            type: string
+            description: Director name
+        - name: by_genre
+          in: query
+          required: false
+          schema:
+            type: string
+            description: Genre name
+      responses:
+        '200':
+          description: List of found movies
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilmsList'
+        '404':
+          description: No data found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/video:
+    get:
+      summary: Stream video file by ID
+      operationId: streamVideo
+      parameters:
+        - name: by_number
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "123"
+          description: ID of the movie (filename will be <id>.mp4)
+      responses:
+        '200':
+          description: Video stream starts
+          content:
+            video/mp4:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Missing 'by_number' parameter
+          content:
+            text/plain:
