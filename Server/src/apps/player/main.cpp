@@ -3,6 +3,7 @@
 #include <QApplication>
 #include "main_window.h"
 #include <getopt.h>
+#include "version.h"
 
 #include "load_config.h"
 
@@ -23,6 +24,8 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
     MainWindow w(player_config);
+
+    w.setWindowTitle(QString::fromStdString(std::string(player_version::name_app))+ " " + QString::fromStdString(player_version::makeServerVersionString()) + "");
     w.show();
     return app.exec();
 

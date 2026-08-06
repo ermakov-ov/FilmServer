@@ -132,23 +132,18 @@ void FilmServer::setupVideoEndpointV1()
                 if (count == 0) {
                     return false;
                 }
-
-                // Отдаём чанк
                 if (!sink.write(buffer, count)) {
                     logWarn("Client disconnected while streaming.");
                     return false;
                 }
 
-                return true; // Есть ещё данные — просим следующий чанк
+                return true;
             },
             [path](bool success) {
                 if (success) {
                     logDebug("Video stream completed: " + path);
-                } else {
-                    // Это срабатывает, если лямбда вернула false.
-                    // Важно: false — это не всегда ошибка. EOF — это success = true по смыслу.
-                    // Но httplib передаёт сюда результат работы лямбды, а не «ошибку».
-                    // Поэтому лучше трактовать так: если мы дошли сюда — поток завершён.
+                }
+                else {
                     logInfo("Video stream finished: " + path);
                 }
             }

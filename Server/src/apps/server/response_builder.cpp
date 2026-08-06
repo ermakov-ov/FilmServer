@@ -1,31 +1,9 @@
 #include "response_builder.h"
+#include "version.h"
 
 #include "film_server.h"
 
 namespace response {
-
-/*
-{
-  "service": {
-    "name": "film-server",
-    "version": "1.0.0"
-  },
-  "data": {
-    "total_films": 42,
-    "total_actors": 128,
-    "total_directors": 37,
-    "total_genres": 15,
-    "index_tokens_count": 942,
-    "avg_films_per_actor": 0.33
-  },
-  "performance": {
-    "active_connections": 3,
-    "queue_length": 0,
-    "avg_response_time_ms": 12.4
-  },
-  "uptime_seconds": 8921
-}
-**/
 
 json_data::JsonValuePtr stats_answer(film_server::FilmServerStat &film_server_stat, FilmDbStat &film_db_stat)
 {
@@ -36,8 +14,8 @@ json_data::JsonValuePtr stats_answer(film_server::FilmServerStat &film_server_st
         json_data::JsonValuePtr service = std::make_unique<json_data::JsonObject>();
         json_data::JsonObject *service_ptr = static_cast<json_data::JsonObject *>(service.get()) ;
 
-        json_data::JsonValuePtr jsn_name = std::make_unique<json_data::JsonString>("film-server");
-        json_data::JsonValuePtr jsn_version = std::make_unique<json_data::JsonString>("1.0.0");
+        json_data::JsonValuePtr jsn_name = std::make_unique<json_data::JsonString>(std::string(server_version::name_app));
+        json_data::JsonValuePtr jsn_version = std::make_unique<json_data::JsonString>(server_version::makeServerVersionString());
 
         service_ptr->setMember("name", std::move(jsn_name));
         service_ptr->setMember("version", std::move(jsn_version));
@@ -159,18 +137,6 @@ json_data::JsonValuePtr error_answer(int code, const std::string& message)
     return  create_base_answer(std::move(empty_arr), 1, 1, 0, code,message);
 }
 
-/*
-{
-  "results": [],
-  "total": 0,
-  "limit": 100,
-  "offset": 0,
-  "error": {
-    "code": 1111,
-    "text": "Database connection failed"
-  }
-}
- */
 json_data::JsonValuePtr create_base_answer(json_data::JsonValuePtr result,
     int total,
     int limit,

@@ -21,16 +21,6 @@ struct Genre {
     std::string name;
 };
 
-/*struct Film {
-    int m_id;
-    std::string m_title;
-    int m_releaseYear;
-    std::string m_description;
-    std::vector<int> m_genreIds;
-    std::vector<int> m_actorIds;
-    int m_directorId;
-};*/
-
 struct FilmDbStat
 {
     int db_total_films;

@@ -7,7 +7,7 @@ add_executable(Player
         load_config.cpp
         ../../common/logger.cpp
 )
-# Подключаем только то, что реально нужно плееру
+
 target_link_libraries(Player PRIVATE
         json_lib
         Qt6::Core

@@ -1,7 +1,10 @@
 #include "httplib.h"
 #include "film_server.h"
 #include "load_json.h"
+#include "version.h"
+
 #include <getopt.h>
+
 #include "../../json/json_data.h"
 #include "../../json/parser_json.h"
 #include "../common/logger.h"
@@ -18,7 +21,7 @@ int main(int argc, char* argv[])
         CommandLineData command_line = parseCommandLine(argc, argv) ;
         film_server::ServerConfig server_config;
 
-        logInfo("Start FilmServer application.") ;
+        logInfo("Start "+std::string(server_version::name_app) + " application. (Version - "+ server_version::makeServerVersionString() + ")") ;
         film_server::loadDataFromConfig(command_line.config_file, server_config) ;
         film_server::initDailyLogs(server_config.log_path) ;
         logInfo("Load configuration files...") ;
