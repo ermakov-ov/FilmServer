@@ -1,0 +1,326 @@
+[
+  {
+    "id": 100,
+    "title": "Forrest Gump",
+    "releaseYear": 1994,
+    "description": "Life is like a box of chocolates...",
+    "genres": ["Drama", "Romance"],
+    "actorIds": [1],
+    "directorId": 22
+  },
+  {
+    "id": 101,
+    "title": "The Shawshank Redemption",
+    "releaseYear": 1994,
+    "description": "Two imprisoned men bond over a number of years...",
+    "genres": ["Drama"],
+    "actorIds": [2],
+    "directorId": 11
+  },
+  {
+    "id": 102,
+    "title": "Inception",
+    "releaseYear": 2010,
+    "description": "A thief who steals corporate secrets through dream-sharing technology...",
+    "genres": ["Sci-Fi", "Action"],
+    "actorIds": [3, 18],
+    "directorId": 1
+  },
+  {
+    "id": 103,
+    "title": "There Will Be Blood",
+    "releaseYear": 2007,
+    "description": "An oil prospector in Southern California...",
+    "genres": ["Drama"],
+    "actorIds": [5],
+    "directorId": 18
+  },
+  {
+    "id": 104,
+    "title": "The Dark Knight",
+    "releaseYear": 2008,
+    "description": "When the menace known as the Joker wreaks havoc...",
+    "genres": ["Action", "Crime", "Drama"],
+    "actorIds": [23, 14],
+    "directorId": 1
+  },
+  {
+    "id": 105,
+    "title": "Pulp Fiction",
+    "releaseYear": 1994,
+    "description": "The lives of two mob hitmen, a boxer, and others intertwine...",
+    "genres": ["Crime", "Drama"],
+    "actorIds": [12, 26],
+    "directorId": 2
+  },
+  {
+    "id": 106,
+    "title": "Goodfellas",
+    "releaseYear": 1990,
+    "description": "The story of Henry Hill and his life in the mob...",
+    "genres": ["Crime", "Biography", "Drama"],
+    "actorIds": [11, 12],
+    "directorId": 3
+  },
+  {
+    "id": 107,
+    "title": "Saving Private Ryan",
+    "releaseYear": 1998,
+    "description": "Following the Normandy landings, a group of U.S. soldiers...",
+    "genres": ["War", "Drama", "Action"],
+    "actorIds": [1, 7],
+    "directorId": 4
+  },
+  {
+    "id": 108,
+    "title": "Gladiator",
+    "releaseYear": 2000,
+    "description": "A former Roman general seeks vengeance against the corrupt emperor...",
+    "genres": ["Action", "Drama", "History"],
+    "actorIds": [5, 11],
+    "directorId": 5
+  },
+  {
+    "id": 109,
+    "title": "Avatar",
+    "releaseYear": 2009,
+    "description": "A paraplegic Marine dispatched to Pandora...",
+    "genres": ["Sci-Fi", "Action", "Adventure"],
+    "actorIds": [3, 16],
+    "directorId": 6
+  },
+  {
+    "id": 110,
+    "title": "The Grand Budapest Hotel",
+    "releaseYear": 2014,
+    "description": "A legendary concierge at a famous European hotel...",
+    "genres": ["Comedy", "Adventure", "Drama"],
+    "actorIds": [21, 9],
+    "directorId": 7
+  },
+  {
+    "id": 111,
+    "title": "Se7en",
+    "releaseYear": 1995,
+    "description": "Two detectives hunt a serial killer who uses the seven deadly sins...",
+    "genres": ["Crime", "Mystery", "Thriller"],
+    "actorIds": [7, 12],
+    "directorId": 8
+  },
+  {
+    "id": 112,
+    "title": "No Country for Old Men",
+    "releaseYear": 2007,
+    "description": "Violence and mayhem ensue after a hunter stumbles upon a drug deal gone wrong...",
+    "genres": ["Crime", "Drama", "Thriller"],
+    "actorIds": [22],
+    "directorId": 9
+  },
+  {
+    "id": 113,
+    "title": "Blade Runner 2049",
+    "releaseYear": 2017,
+    "description": "A young blade runner's discovery leads him on a quest to track down Rick Deckard...",
+    "genres": ["Sci-Fi", "Drama", "Thriller"],
+    "actorIds": [22, 16],
+    "directorId": 10
+  },
+  {
+    "id": 114,
+    "title": "Psycho",
+    "releaseYear": 1960,
+    "description": "A Phoenix secretary embezzles $40,000 and heads for Texas...",
+    "genres": ["Horror", "Thriller", "Mystery"],
+    "actorIds": [25],
+    "directorId": 11
+  },
+  {
+    "id": 115,
+    "title": "2001: A Space Odyssey",
+    "releaseYear": 1968,
+    "description": "Humanity's encounter with alien life forms...",
+    "genres": ["Sci-Fi", "Adventure", "Mystery"],
+    "actorIds": [25],
+    "directorId": 12
+  },
+  {
+    "id": 116,
+    "title": "The Godfather",
+    "releaseYear": 1972,
+    "description": "The aging patriarch of an organized crime dynasty transfers control...",
+    "genres": ["Crime", "Drama"],
+    "actorIds": [12, 11],
+    "directorId": 13
+  },
+  {
+    "id": 117,
+    "title": "Annie Hall",
+    "releaseYear": 1977,
+    "description": "Neurotic New York comedian Alvy Singer looks back at his relationship...",
+    "genres": ["Romance", "Comedy", "Drama"],
+    "actorIds": [14, 6],
+    "directorId": 14
+  },
+  {
+    "id": 118,
+    "title": "Talk to Her",
+    "releaseYear": 2002,
+    "description": "Two men form an unlikely friendship while caring for comatose women...",
+    "genres": ["Drama", "Romance", "Comedy"],
+    "actorIds": [27],
+    "directorId": 15
+  },
+  {
+    "id": 119,
+    "title": "Parasite",
+    "releaseYear": 2019,
+    "description": "A poor family schemes to become employed by a wealthy family...",
+    "genres": ["Thriller", "Comedy", "Drama"],
+    "actorIds": [28],
+    "directorId": 16
+  },
+  {
+    "id": 120,
+    "title": "Lady Bird",
+    "releaseYear": 2017,
+    "description": "A mother and her daughter's relationship through their tumultuous senior year...",
+    "genres": ["Drama", "Comedy"],
+    "actorIds": [19, 24],
+    "directorId": 17
+  },
+  {
+    "id": 121,
+    "title": "Boogie Nights",
+    "releaseYear": 1997,
+    "description": "A high-school dropout becomes a porn star in the 1970s...",
+    "genres": ["Drama", "Biography"],
+    "actorIds": [9, 21],
+    "directorId": 18
+  },
+  {
+    "id": 122,
+    "title": "Do the Right Thing",
+    "releaseYear": 1989,
+    "description": "On a hot summer day in Brooklyn, tensions rise among the residents...",
+    "genres": ["Drama", "Comedy"],
+    "actorIds": [7, 29],
+    "directorId": 19
+  },
+  {
+    "id": 123,
+    "title": "Pan's Labyrinth",
+    "releaseYear": 2006,
+    "description": "In a mythical land, a girl draws closer to her fate...",
+    "genres": ["Fantasy", "Drama", "War"],
+    "actorIds": [24],
+    "directorId": 20
+  },
+  {
+    "id": 124,
+    "title": "300",
+    "releaseYear": 2006,
+    "description": "Spartan king Leonidas leads his army against the Persian forces...",
+    "genres": ["Action", "History", "Drama"],
+    "actorIds": [14],
+    "directorId": 21
+  },
+  {
+    "id": 125,
+    "title": "Apollo 13",
+    "releaseYear": 1995,
+    "description": "NASA must find a way to safely return the Apollo 13 crew to Earth...",
+    "genres": ["History", "Drama", "Adventure"],
+    "actorIds": [1, 13],
+    "directorId": 22
+  },
+  {
+    "id": 126,
+    "title": "Back to the Future",
+    "releaseYear": 1985,
+    "description": "Marty McFly is sent back in time to 1955...",
+    "genres": ["Sci-Fi", "Comedy", "Adventure"],
+    "actorIds": [15, 8],
+    "directorId": 24
+  },
+  {
+    "id": 127,
+    "title": "Whiplash",
+    "releaseYear": 2014,
+    "description": "An ambitious drummer is accepted into a prestigious music school...",
+    "genres": ["Drama", "Music"],
+    "actorIds": [22, 25],
+    "directorId": 18
+  },
+  {
+    "id": 128,
+    "title": "Juno",
+    "releaseYear": 2007,
+    "description": "A teenager navigates an unplanned pregnancy and adoption...",
+    "genres": ["Comedy", "Drama", "Romance"],
+    "actorIds": [17, 6],
+    "directorId": 25
+  },
+  {
+    "id": 129,
+    "title": "La La Land",
+    "releaseYear": 2016,
+    "description": "An aspiring actress and a dedicated jazz musician pursue their dreams...",
+    "genres": ["Musical", "Romance", "Drama"],
+    "actorIds": [19, 20],
+    "directorId": 18
+  },
+  {
+    "id": 130,
+    "title": "Interstellar",
+    "releaseYear": 2014,
+    "description": "A team of explorers travel through a wormhole in search of a new home...",
+    "genres": ["Sci-Fi", "Adventure", "Drama"],
+    "actorIds": [3, 16],
+    "directorId": 1
+  },
+  {
+    "id": 131,
+    "title": "Mad Max: Fury Road",
+    "releaseYear": 2015,
+    "description": "In a post-apocalyptic wasteland, a woman rebels against a tyrannical ruler...",
+    "genres": ["Action", "Sci-Fi", "Adventure"],
+    "actorIds": [27, 13],
+    "directorId": 20
+  },
+  {
+    "id": 132,
+    "title": "The Revenant",
+    "releaseYear": 2015,
+    "description": "A frontiersman fights for survival after being mauled by a bear...",
+    "genres": ["Adventure", "Drama", "History"],
+    "actorIds": [3],
+    "directorId": 10
+  },
+  {
+    "id": 133,
+    "title": "Drive",
+    "releaseYear": 2011,
+    "description": "A Hollywood stunt driver moonlights as a getaway driver...",
+    "genres": ["Crime", "Drama", "Thriller"],
+    "actorIds": [20, 22],
+    "directorId": 8
+  },
+  {
+    "id": 134,
+    "title": "The Social Network",
+    "releaseYear": 2010,
+    "description": "The founding of Facebook and the legal battles that followed...",
+    "genres": ["Biography", "Drama", "History"],
+    "actorIds": [20, 9],
+    "directorId": 18
+  },
+  {
+    "id": 135,
+    "title": "Eternal Sunshine of the Spotless Mind",
+    "releaseYear": 2004,
+    "description": "A couple undergoes a procedure to erase each other from their memories...",
+    "genres": ["Romance", "Sci-Fi", "Drama"],
+    "actorIds": [3, 6],
+    "directorId": 18
+  }
+]

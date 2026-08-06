@@ -1,0 +1,11 @@
+05-08-2026 14:55:20 [INFO] Starting VLC to play: ./videos/107.mp4 (size: 7477923 bytes)
+05-08-2026 14:55:20 [DEBUG] VLC process started successfully.
+05-08-2026 14:55:23 [INFO] VLC finished. Exit code: 0, Status: Normal
+05-08-2026 15:06:41 [INFO] Starting VLC to play: ./videos/107.mp4 (size: 7477923 bytes)
+05-08-2026 15:16:56 [INFO] Starting VLC to play: ./videos/107.mp4 (size: 7477923 bytes)
+05-08-2026 15:16:56 [DEBUG] VLC process started successfully.
+05-08-2026 15:17:02 [INFO] VLC finished. Exit code: 0, Status: Normal
+05-08-2026 17:59:56 [INFO] Starting VLC to play: ./videos/107.mp4 (size: 7477923 bytes)
+05-08-2026 17:59:56 [DEBUG] VLC process started successfully.
+05-08-2026 17:59:58 [INFO] VLC finished. Exit code: 0, Status: Normal
+05-08-2026 18:25:58 [INFO] Request to the server:http://127.0.0.1:8080/api/v1/search?by_title=in

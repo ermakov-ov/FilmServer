@@ -1,0 +1,12 @@
+{
+  "video": {
+    "path": "./videos"
+  },
+  "logging": {
+    "log_dir": "./"
+  },
+  "connection": {
+    "address" : "127.0.0.1",
+    "port": 8080
+  }
+}

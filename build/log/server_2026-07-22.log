@@ -1,0 +1,11 @@
+14:09:20 [INFO] Start FilmServer application.
+14:09:43 [INFO] Method - GET, target - /api/v1/films, remote address - 127.0.0.1
+16:31:00 [INFO] Start FilmServer application.
+16:32:10 [INFO] Start FilmServer application.
+16:35:21 [INFO] Start FilmServer application.
+16:37:16 [INFO] Start FilmServer application.
+16:37:33 [INFO] Start FilmServer application.
+16:38:16 [INFO] Start FilmServer application.
+16:39:52 [INFO] Method - GET, target - /api/v1/stats, remote address - 127.0.0.1
+16:40:39 [INFO] Start FilmServer application.
+16:43:48 [INFO] Start FilmServer application.

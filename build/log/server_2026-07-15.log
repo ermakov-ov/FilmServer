@@ -1,0 +1,18 @@
+17:30:23 [INFO] Start FilmServer application.
+17:46:32 [INFO] Start FilmServer application.
+17:47:05 [INFO] 
+17:49:22 [INFO] Start FilmServer application.
+17:49:32 [INFO] 
+17:52:01 [INFO] Start FilmServer application.
+17:52:06 [INFO] 
+17:58:14 [INFO] Start FilmServer application.
+17:58:24 [INFO] 
+17:58:26 [ERROR] File ./data/video/100.mp4 does not exist. Sent 404 code for answer
+17:59:10 [INFO] Start FilmServer application.
+17:59:19 [INFO] 
+18:02:25 [INFO] Start FilmServer application.
+18:08:57 [INFO] Start FilmServer application.
+18:10:29 [INFO] Start FilmServer application.
+18:10:40 [INFO] Method - GET, target - /video?id=100, remote address - 127.0.0.1
+18:11:30 [INFO] Start sending ./data/videos/100.mp4...
+18:11:30 [INFO] Finish sending ./data/videos/100.mp4...

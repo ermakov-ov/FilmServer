@@ -1,0 +1,16 @@
+18:55:30 [INFO] Start FilmServer application.
+18:55:44 [INFO] Method - GET, target - /video?id=100, remote address - 127.0.0.1
+18:55:44 [INFO] Start sending ./data/videos/100.mp4...
+18:55:44 [INFO] Finish sending ./data/videos/100.mp4...
+18:55:44 [WARN] Video stream interrupted: ./data/videos/100.mp4
+18:56:10 [INFO] Method - GET, target - /video?id=100, remote address - 127.0.0.1
+18:56:10 [INFO] Start sending ./data/videos/100.mp4...
+18:56:10 [INFO] Finish sending ./data/videos/100.mp4...
+18:56:13 [WARN] Video stream interrupted: ./data/videos/100.mp4
+18:56:36 [INFO] Method - GET, target - /video?id=101, remote address - 127.0.0.1
+18:56:36 [ERROR] File ./data/videos/101.mp4 does not exist.
+19:05:53 [INFO] Method - GET, target - /films, remote address - 127.0.0.1
+19:06:15 [INFO] Method - GET, target - /stats, remote address - 127.0.0.1
+19:07:42 [INFO] Method - GET, target - /stats, remote address - 127.0.0.1
+19:08:40 [INFO] Method - GET, target - /films, remote address - 127.0.0.1
+20:42:31 [INFO] Start FilmServer application.

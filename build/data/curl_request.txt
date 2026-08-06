@@ -1,0 +1,18 @@
+// only director
+curl "http://127.0.0.1:8080/api/v1/search?by_director=Christopher%20Nolan"
+
+
+//only acor
+curl "http://127.0.0.1:8080/api/v1/search?by_actor=Leonardo%20DiCaprio"
+
+
+// only name of film
+curl "http://127.0.0.1:8080/api/v1/search?by_title=Inception"
+
+
+//all
+curl "http://127.0.0.1:8080/api/v1/search?by_title=Inception&by_actor=Leonardo%20DiCaprio&by_director=Christopher%20Nolan"
+
+//genre
+curl "http://127.0.0.1:8080/api/v1/search?by_genre=Drama"
+curl "http://127.0.0.1:8080/api/v1/search?by_genre=Sci-Fi"
