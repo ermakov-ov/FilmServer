@@ -28,6 +28,7 @@ void FilmServer::run()
 void FilmServer::setupRoutes()
 {
     setupStatsRoutesV1();
+    setupDocsEndpointV1();
     setupVideoEndpointV1();
     setupSearchRoutesV1();
 }
@@ -36,7 +37,6 @@ void FilmServer::setupStatsRoutesV1()
 {
     m_http_server.Get("/api/v1/stats",
      [this](const httplib::Request &req, httplib::Response &res) {
-
          ++m_stat_counter.all_request;
          logInfo(getRequestInfoData(req)) ;
 
@@ -53,6 +53,33 @@ void FilmServer::setupStatsRoutesV1()
          }
          res.set_content(std::move(response_jsn->toString()), "application/json");
      });
+}
+
+void FilmServer::setupDocsEndpointV1()
+{
+    m_http_server.Get("/api/v1/openapi.yaml",
+        [this](const httplib::Request &req, httplib::Response& res) {
+        ++m_stat_counter.all_request;
+        auto content = common::readFile("openapi.yaml"); // твоя функция чтения файла
+        if (content.empty()) {
+            res.status = 404;
+            res.set_content("OpenAPI spec not found", "text/plain");
+            return;
+        }
+        res.set_content(content, "application/vnd.oai.openapi+yaml");
+    });
+
+    m_http_server.Get("/api/v1/docs",
+        [this](const httplib::Request &req, httplib::Response& res) {
+        ++m_stat_counter.all_request;
+        auto index = common::readFile("static/swagger-ui/index.html");
+        if (index.empty()) {
+            res.status = 404;
+            res.set_content("Swagger UI not found", "text/plain");
+            return;
+        }
+        res.set_content(index, "text/html");
+    });
 }
 
 void FilmServer::setupSearchRoutesV1()
