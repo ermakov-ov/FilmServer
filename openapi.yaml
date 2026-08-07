@@ -1,8 +1,9 @@
+---
 openapi: 3.0.3
 info:
   title: Film Server API
   version: "2.1.0"
-  description: Minimal HTTP server for movies with search, stats, and video streaming.
+  description: Minimal HTTP server for movies.
 
 servers:
   - url: http://localhost:8080
@@ -95,3 +96,71 @@ paths:
           description: Missing 'by_number' parameter
           content:
             text/plain:
+
+components:
+  schemas:
+    Stats:
+      type: object
+      properties:
+        total_films:
+          type: integer
+          description: Общее количество фильмов в базе
+        total_actors:
+          type: integer
+          description: Количество уникальных актёров
+        total_sessions:
+          type: integer
+          description: Число активных сессий (из httplib::Server)
+        avg_rating:
+          type: number
+          format: double
+          description: Средний рейтинг (если есть)
+          nullable: true
+      required:
+        - total_films
+        - total_actors
+        - total_sessions
+
+    FilmBrief:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Название фильма
+        year:
+          type: integer
+          description: Год выпуска
+        director:
+          type: string
+          description: Режиссёр
+        actors:
+          type: array
+          items:
+            type: string
+          description: Список актёров
+        genres:
+          type: array
+          items:
+            type: string
+          description: Жанры фильма
+      required:
+        - title
+        - year
+
+    FilmsList:
+      type: array
+      items:
+        $ref: '#/components/schemas/FilmBrief'
+
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "NOT_FOUND"
+        message:
+          type: string
+          example: "No matching films found"
+      required:
+        - code
+        - message

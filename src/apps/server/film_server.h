@@ -33,6 +33,8 @@ namespace film_server {
         void setupStatsRoutesV1();
         void setupVideoEndpointV1();
         void setupSearchRoutesV1();
+        void setupDocsEndpointV1() ;
+
         std::optional<FilmServerStat> getFilmServerStatStat() const;
 
         std::string getRequestInfoData(const httplib::Request &req) ;

@@ -27,7 +27,7 @@ add_subdirectory(src/apps/server)       # внутри: add_executable(Server ..
 add_subdirectory(src/apps/player)       # внутри: add_executable(Player ...), link common, json_lib и т.д.
 
 
-# --- Тесты (только если BUILD_TESTS=ON) ---
+# --- Тесты (только если BUILD_TESTS=OFF) ---
 if(BUILD_TESTS)
     enable_testing()
 
