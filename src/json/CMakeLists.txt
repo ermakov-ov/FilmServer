@@ -1,4 +1,4 @@
-# --- Библиотека json_lib ---
+
 add_library(json_lib STATIC
         ../common/common.cpp
         json_data.cpp
