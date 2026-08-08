@@ -4,28 +4,24 @@ project(FilmServer LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Опция: включать ли тесты (по умолчанию ON, чтобы my_tests появился)
+
 option(BUILD_TESTS "Build tests" ON)
 
-# --- Общие библиотеки ---
 
 # json_lib
-add_subdirectory(src/json)          # внутри: add_library(json_lib ...)
+add_subdirectory(src/json)
 
 # film_db_lib
-add_subdirectory(src/film_db)       # внутри: add_library(film_db_lib ...), link json_lib
+add_subdirectory(src/film_db)
 
 # common (если там есть .cpp)
-#add_subdirectory(src/common)       # если только .h — можно просто добавить include dir
-
-# --- Приложения ---
+#add_subdirectory(src/common)
 
 # Server (HTTP API)
-add_subdirectory(src/apps/server)       # внутри: add_executable(Server ...), link film_db_lib
+add_subdirectory(src/apps/server)
 
 # Player (проигрыватель)
-add_subdirectory(src/apps/player)       # внутри: add_executable(Player ...), link common, json_lib и т.д.
-
+add_subdirectory(src/apps/player)
 
 # --- Тесты (только если BUILD_TESTS=OFF) ---
 if(BUILD_TESTS)
