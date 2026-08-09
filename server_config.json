@@ -1,0 +1,17 @@
+{
+  "db" : {
+    "pathes": {
+      "actors":    "./actors.json",
+      "films" :    "./films.json",
+      "video" :    "./videos",
+      "directors": "./directors.json",
+      "genres":    "./genres.json"
+    }
+  },
+  "connection": {
+    "port": 8080
+  },
+  "logging": {
+    "log_dir": "./"
+  }
+}
