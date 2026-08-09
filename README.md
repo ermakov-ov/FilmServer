@@ -148,25 +148,24 @@ genres.json
 с указанием уровня (INFO/WARN/ERROR), временной метки и сообщения.
 
 ### Сборка и запуск
+
+- C++17 или выше (проверено на GNU g++ 13.3.0)
+- CMake ≥ 3.16 (проверено на 3.28)
+- Qt6 (для клиента)
+
+
 ### Сборка (CMake)
 ```bash
-mkdir build && cd build
-cmake ..
-make -j$(nproc)
+rm -rf build && mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build .
+cd ..
 ```
 
 ### Запуск
 
 ```bash
-cd build
-./Server -c server.json
+./build/src/apps/server/Server -c ./server_config.json
+./build/src/apps/client/Player -c ./player_config.json
 ```
-
-### Важное про рабочую директорию
-
-### Сервер должен запускаться из папки, где лежат:
-
-- конфигурационный файл (server.conf);
-- папка data/ с JSON‑файлами;
-- openapi.yaml;
-- папка static/swagger-ui/ с index.html.
+Данные и медиафайлы лежат в папке data/, логи пишутся в data/log/.
