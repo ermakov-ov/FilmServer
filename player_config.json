@@ -1,9 +1,9 @@
 {
   "video": {
-    "path": "./videos"
+    "path": "./data/videos"
   },
   "logging": {
-    "log_dir": "./"
+    "log_dir": "./data/"
   },
   "connection": {
     "address" : "127.0.0.1",
