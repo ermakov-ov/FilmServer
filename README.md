@@ -1,57 +1,57 @@
 # film-server
 
-Демонстрационный HTTP‑сервер на C++, показывающий реализацию ключевых компонентов: собственный JSON‑парсер, ThreadPool и механизмы быстрого поиска по данным без использования СУБД. Работает в связке с клиентом `player` (Qt6).
-
-> **Важно:** проект предназначен для демонстрации архитектурных решений и приёмов разработки. Не для продакшн‑эксплуатации.
+A demonstration HTTP server written in C++ showcasing the implementation of key components: a custom JSON parser, 
+a thread pool, and fast search mechanisms over data without using a database. Works in conjunction with the player client (Qt6).
+> **Important:** This project is intended to demonstrate architectural solutions and development techniques. It is not meant for production use.
 
 ## Что реализовано и зачем
 
-- **Собственный JSON‑парсер (JsonParser/json_lib)** — базовая реализация для загрузки и парсинга JSON‑файлов без внешних зависимостей. Не позиционируется как промышленная библиотека уровня RapidJSON или nlohmann::json. Реализован как демонстрационный компонент, показывающий, как можно решить узкую задачу (загрузка данных проекта) с учётом конкретных условий и ограничений.
-- **FilmDb и индексация** — поиск по названиям, актёрам, режиссёрам и жанрам через `std::unordered_map<std::string, std::vector<int>>` с токенизацией и приведением к нижнему регистру. Демонстрирует, как организовать быстрый поиск без СУБД.
-- **Thread Pool** — собственная реализация пула потоков для обработки запросов.
-- **Минималистичный API** — только базовые эндпоинты, чтобы показать принцип работы.
-- **Интеграция с клиентом `player`** — Qt6‑приложение с вкладками и поиском, которое использует эти механизмы.
+- **Custom JSON parser (JsonParser/json_lib)** — a basic implementation for loading and parsing JSON files without external dependencies. It is not positioned as an industrial‑grade library comparable to RapidJSON or nlohmann::json. It serves as a demonstration component showing how to solve a narrow task (loading project data) under specific conditions and constraints.
+- **FilmDb and indexing ** — earch by title, actors, directors, and genres using `std::unordered_map<std::string, std::vector<int>>` with tokenization and lowercase normalization. Demonstrates how to implement fast search without a DBMS.
+- **Thread Pool** — a custom thread pool implementation for request handling.
+- **Минималистичный API** — only basic endpoints to illustrate the core principles.
+- **Integration with the  `player`** — a Qt6 application with tabs and search functionality that leverages these mechanisms.
 
-## API эндпоинты
+## API endpoints
 
-| Метод | Путь | Описание |
-|-------|------|----------|
-| `GET` | `/api/v1/films` | Поиск фильмов с фильтрацией по параметрам: `by_title`, `by_actor`, `by_director`, `by_genre`. Фильтрация применяется только по переданным параметрам. Если не передан ни один параметр — поиск не осуществляется, возвращается пустой результат. |
-| `GET` | `/api/v1/stats` | Статистика (демонстрация агрегации). |
-| `GET` | `/api/v1/openapi.yaml` | OpenAPI‑спецификация. |
-| `GET` | `/docs` | Swagger UI (минимальная версия). |
+| Method | Path                   | Description                                                                                                                                                                                                                                      |
+|--------|------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `GET`  | `/api/v1/films`        | Search for films with filtering by parameters: by_title, by_actor, by_director, by_genre. Filtering is applied only for the provided parameters. If no parameters are provided, no search is performed and an empty result is returned. |
+| `GET`  | `/api/v1/stats`        | Statistics (demonstration of aggregation).                                                                                                                                                                                                             |
+| `GET`  | `/api/v1/openapi.yaml` | OpenAPI specification.                                                                                                                                                                                                                            |
+| `GET`  | `/docs`                | Swagger UI (minimal version).                                                                                                                                                                                                                 |
 
 ## Примеры запросов (curl)
 
 ```bash
-# По названию
+# By title
 curl "http://127.0.0.1:8080/api/v1/films?by_title=matrix"
 
-# По актёру
+# By actor
 curl "http://127.0.0.1:8080/api/v1/films?by_actor=keanu"
 
-# По режиссёру
+# By director
 curl "http://127.0.0.1:8080/api/v1/films?by_director=spielberg"
 
-# По жанру
+# By genre
 curl "http://127.0.0.1:8080/api/v1/films?by_genre=action"
 ```
 
-## Как устроена логика поиска
+## Search logic overview
 
-- Строки (названия, имена актёров, режиссёров, жанры) приводятся к нижнему регистру.
-- Разбиваются на токены (слова).
-- Токены маппятся на ID фильмов в unordered_map (аналогично для актёров, названий, режиссёров и жанров).
-- Результат формируется через пересечение множеств ID по заданным фильтрам.
-
-
-### Данные и конфигурация
-
-Система не использует базы данных. Информация о фильмах, актёрах, режиссёрах и жанрах хранится в JSON‑файлах. 
-Пути к файлам задаются в конфигурационном файле сервера.
+- Strings (titles, actor names, director names, genres) are converted to lowercase.
+- They are split into tokens (words).
+- Tokens are mapped to film IDs in an unordered_map (similar mappings exist for actors, titles, directors, and genres).
+- The result is formed by intersecting the sets of IDs according to the specified filters.
 
 
-### Пример конфигурации сервера (server.json в формате JSON)
+### Data and configuration
+
+The system does not use a database. Information about films, actors, directors, and genres is stored in JSON files.
+Paths to the files are specified in the server’s configuration file.
+
+
+### Example server configuration (server_config.json in JSON format)
 ```bash
 {
   "db": {
@@ -72,7 +72,8 @@ curl "http://127.0.0.1:8080/api/v1/films?by_genre=action"
 }
 ```
 
-### Примеры файлов с данными films.json
+### Example data files
+## films.json
 ```bash
 [
   {
@@ -95,7 +96,7 @@ curl "http://127.0.0.1:8080/api/v1/films?by_genre=action"
   }
 ]
 ```
-actors.json
+## actors.json
 ```bash
 [
   {"id": 1, "name": "Tom Hanks"},
@@ -104,7 +105,7 @@ actors.json
 ]
 
 ```
-directors.json
+## directors.json
 ```bash
 [
   {"id": 1, "name": "Tom Hanks"},
@@ -113,7 +114,7 @@ directors.json
 ]
 
 ```
-genres.json
+## genres.json
 ```bash
 [
   {"id": 1, "name": "Action"},
@@ -121,9 +122,8 @@ genres.json
 ]
 
 ```
-### Конфигурация клиента player
-Клиент player также использует конфигурационный файл для определения 
-путей и параметров подключения.
+### Player client configuration
+The player client also uses a configuration file to define paths and connection parameters.
 
 ```bash
 {
@@ -139,22 +139,22 @@ genres.json
   }
 }
 ```
-Для воспроизведения видео используется плеер VLC. Проверка наличия VLC вынесена в отдельный метод isVlcAvailable, 
-который вызывается при попытке запуска файла.
+Video playback uses the VLC player. The check for VLC availability is implemented in a separate method isVlcAvailable, 
+which is called only when attempting to start a file.
 
-### Логирование
+### Logging
 
-Сервер и клиент ведут логи в директорию, указанную в конфигурации (log_dir). Формат лога — текстовый, построчный, 
-с указанием уровня (INFO/WARN/ERROR), временной метки и сообщения.
+Both the server and the client write logs to the directory specified in the configuration (log_dir). The log format is 
+plain text, line‑by‑line, including the log level (INFO/WARN/ERROR), timestamp, and message.
 
-### Сборка и запуск
+### Build and run
+Requirements
+- C++17 or higher (tested with GNU g++ 13.3.0)
+- CMake ≥ 3.16 (tested with 3.28)
+- Qt6 (for the client)
 
-- C++17 или выше (проверено на GNU g++ 13.3.0)
-- CMake ≥ 3.16 (проверено на 3.28)
-- Qt6 (для клиента)
 
-
-### Сборка (CMake)
+### Build (CMake)
 ```bash
 rm -rf build && mkdir build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
@@ -162,10 +162,10 @@ cmake --build .
 cd ..
 ```
 
-### Запуск
+### Run
 
 ```bash
 ./build/src/apps/server/Server -c ./server_config.json
 ./build/src/apps/client/Player -c ./player_config.json
 ```
-Данные и медиафайлы лежат в папке data/, логи пишутся в data/log/.
+Data and media files are located in the data/ folder; logs are written to data/log/.
