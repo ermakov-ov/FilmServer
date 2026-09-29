@@ -2,13 +2,16 @@
 
 namespace film_server {
 
-ThreadPool::ThreadPool(std::size_t num_threads) : m_stop(false) {
+ThreadPool::ThreadPool(std::size_t num_threads)
+: m_stop(false)
+{
     for (std::size_t i = 0; i < num_threads; ++i) {
         m_workers.emplace_back(&ThreadPool::worker_loop, this);
     }
 }
 
-ThreadPool::~ThreadPool() {
+ThreadPool::~ThreadPool()
+{
     {
         std::unique_lock<std::mutex> lock(m_mutex);
         m_stop = true;
@@ -20,7 +23,8 @@ ThreadPool::~ThreadPool() {
     }
 }
 
-void ThreadPool::worker_loop() {
+void ThreadPool::worker_loop()
+{
     while (true) {
         std::function<void()> task;
 

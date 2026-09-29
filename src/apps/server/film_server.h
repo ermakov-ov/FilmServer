@@ -7,6 +7,7 @@
 #include "thread_pool.h"
 #include "../film_db/film_db.h"
 #include "load_json.h"
+#include "../common/cache.h"
 
 namespace film_server {
 
@@ -23,6 +24,11 @@ namespace film_server {
         std::size_t errors_request = 0;
         std::size_t all_request = 0;
     };
+    struct FilmServerStatCommon {
+        FilmServerStat        cmn_film_server_stat;
+        FilmServerStatCounter cmn_stat_counter;
+        FilmDbStat            cmn_db_stat;
+    };
     class FilmServer {
     public:
         explicit FilmServer(const film_server::ServerConfig &server_config, std::shared_ptr<FilmDb> db);
@@ -34,6 +40,7 @@ namespace film_server {
         void setupVideoEndpointV1();
         void setupSearchRoutesV1();
         void setupDocsEndpointV1() ;
+        std::optional<FilmServerStatCommon> getCommonStat();
 
         std::optional<FilmServerStat> getFilmServerStatStat() const;
 
@@ -44,6 +51,9 @@ namespace film_server {
         std::shared_ptr<FilmDb>   m_db;
         ThreadPool                m_threadpool;
         FilmServerStatCounter     m_stat_counter;
+
+        TimedCache<std::string, FilmServerStatCommon> m_stat_cached;
+
     };
 }
 #endif // HORSELINE_FILM_SERVER_H

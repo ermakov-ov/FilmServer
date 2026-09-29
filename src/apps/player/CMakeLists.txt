@@ -1,4 +1,3 @@
-
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Network)
 
 add_executable(Player

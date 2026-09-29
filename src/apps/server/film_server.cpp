@@ -13,6 +13,7 @@ FilmServer::FilmServer(const film_server::ServerConfig &server_config, std::shar
 : m_server_config(server_config)
 , m_db(std::move(db))
 , m_threadpool(std::thread::hardware_concurrency())
+, m_stat_cached(std::chrono::seconds(60))
 {
     setupRoutes();
 }
@@ -32,7 +33,21 @@ void FilmServer::setupRoutes()
     setupVideoEndpointV1();
     setupSearchRoutesV1();
 }
+std::optional<FilmServerStatCommon> FilmServer::getCommonStat()
+{
 
+    auto film_stat = getFilmServerStatStat();
+    auto film_db_stat = m_db->getFilmDbStat();
+
+    if (!film_stat.has_value() || !film_db_stat.has_value()) {
+        return std::nullopt;
+    }
+
+    FilmServerStatCommon ret_value = {film_stat.value(), m_stat_counter, film_db_stat.value()};
+
+    return ret_value;
+
+}
 void FilmServer::setupStatsRoutesV1()
 {
     m_http_server.Get("/api/v1/stats",
@@ -40,10 +55,28 @@ void FilmServer::setupStatsRoutesV1()
          ++m_stat_counter.all_request;
          logInfo(getRequestInfoData(req)) ;
 
-         auto film_stat = getFilmServerStatStat();
-         auto film_db_stat = m_db->getFilmDbStat();
+         auto combine_stat = m_stat_cached.get("common_stats");
+         FilmServerStatCommon stats_common;
 
-         json_data::JsonValuePtr response_jsn(std::move(response::stats_answer(film_stat.value(), film_db_stat.value()))) ;
+         if ( combine_stat.has_value()) {
+             stats_common = combine_stat.value();
+         }
+         else {
+             auto new_combine_stat = getCommonStat() ;
+             if (new_combine_stat.has_value()) {
+                 stats_common = new_combine_stat.value();
+             }
+             else {
+                 ++m_stat_counter.errors_request;
+                 logError("Unknown error for \"films\" request") ;
+                 res.set_content("Unknown error for request", "text/plain");
+                 res.status = 500;
+                 return ;
+             }
+             m_stat_cached.set("common_stats", std::move(stats_common));
+         }
+
+         json_data::JsonValuePtr response_jsn(std::move(response::stats_answer(stats_common.cmn_film_server_stat, stats_common.cmn_db_stat))) ;
          if (response_jsn.get() == nullptr) {
              ++m_stat_counter.errors_request;
              logError("Unknown error for \"films\" request") ;

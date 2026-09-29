@@ -507,6 +507,46 @@ std::vector<Film> FilmDb::searchFilms(
     return result;
 }
 
+/*
+
+std::vector<Film> FilmDb::findInIndex(
+    const std::string& title,
+    const std::string& actorCsv,
+    const std::string& director,
+    const std::string& genre) const
+{
+    std::vector<Film> result;
+
+    // Пример: если есть индекс по названию — проверяем его
+    if (!title.empty()) {
+        auto it = m_index_by_title.find(title);
+        if (it != m_index_by_title.end()) {
+            result = it->second;
+            return result;  // сразу возвращаем: в индексе нашли
+        }
+    }
+
+    // Аналогично для актёров, режиссёра, жанра — по тем индексам, что у тебя есть
+    if (!actorCsv.empty()) {
+        // допустим, у тебя токенизация и индекс по актёрам
+        for (const auto& token : tokenize(actorCsv)) {
+            auto it = m_index_by_actor.find(token);
+            if (it != m_index_by_actor.end()) {
+                // можно добавить все найденные, или вернуть первые N — как тебе нужно
+                result.insert(result.end(), it->second.begin(), it->second.end());
+            }
+        }
+        if (!result.empty()) return result;
+    }
+
+    // Дальше по аналогии для director/genre...
+
+    return result;  // пусто, если ни в одном индексе ничего не нашлось
+}
+*/
+
+
+
 std::string FilmDb::createFilmsAnswer(const std::vector<Film>& movies)
 {
     json_data::JsonArray arr;
